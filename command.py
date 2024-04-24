@@ -43,7 +43,7 @@ class CommandHandler:
 		self.please = please
 		cmd = command.split(" ")
 		nocmd = False
-		if len(cmd) == 0 or command == "" or command == " ":
+		if all(char.isspace() for char in cmd[0]) or len(cmd) == 0:
 			# blank command, do nothing.
 			nocmd = True
 			return 0
@@ -61,7 +61,7 @@ class CommandHandler:
 				else:
 					shared.logger.error("PLEASE password authentication has failed.")
 					return
-		if "??" in cmd[0]:
+		if cmd[0].strip() == "#":
 			return 0
 #		print(nocmd)
 		try:

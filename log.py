@@ -99,6 +99,5 @@ class CommandLogger:
 # type(shared.logger) or type(shared.log.logger)
 # Logger (should) be accessed via shared lib
 # not direct, to prevent ImportError.
-global logger
 logger = CommandLogger()
 

@@ -150,4 +150,5 @@ def cowsay(ctx, args):
 	return 0
 
 def regview(ctx, args):
-	shared.logger.info(system.data.get(args[0]))
+	shared.logger.info(args[1])
+	shared.logger.info(system.data.get(args[1]))

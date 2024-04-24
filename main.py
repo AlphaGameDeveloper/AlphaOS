@@ -69,9 +69,10 @@ def cli():
 			for i in range(5):
 				sys.stdout.write("\rRecovering from fatal error.   ETA={}".format(i+1))
 				time.sleep(1)
-
-			shared.logger.warn("Saved traceback... Recovering successful.")
+			sys.stdout.write("\n")
+			shared.logger.info("Saved traceback... Save successful.")
 			shared.logger.warn("Internal error hash SHA256: {}".format(hash(e)))
+
 
 
 	debug = (True if os.getenv("DEBUG") else False)
@@ -79,32 +80,14 @@ def cli():
 		exec("."*50)
 		_time("Query {0}; Time={1}s".format(("OK" if ok == True else "NOT OK"), time.perf_counter() - start_time))
 
-def pinkScreen():
-	print("""
-	      _ 
-	     / )
-	 _  / / 
-	(_)( (  
-	   | |  
-	 _ ( (  
-	(_) \ \ 
-	     \_)""")
-	shared.whiptail.msgbox("uwu")
-	shared.logger.error("Oh noes!  I seem to have oofed.")
-	wait = 5
-	for i in range(wait):
-		sys.stdout.write("\rCollecting error data...  ETA={}....".format(wait-(i+1)))
-		time.sleep(1)
-	sys.stdout.write("\nOk.. Restarting!")
-
 def pinkScreenGUI():
 	shared.whiptail.msgbox("""              _
              / )
-         _  / /
-        (_)( (
-           | |
+         _  / /       Well, this is awkward!
+        (_)( (          AlphaOS crashed against a wall and can't get back up :/
+           | |          AlphaOS will now restart, to clean myself up.
          _ ( (
-        (_) \ \
+        (_) \ \\  Please make a GitHub issue, that would help loads!
              \_)
 """)
 
