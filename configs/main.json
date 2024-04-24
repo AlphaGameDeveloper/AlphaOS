@@ -1,0 +1,30 @@
+{
+	"comment": [
+		"DamienOS main configuration file",
+		"Unset values are None"
+	],
+	"display-nonzero-warning": false,
+	"display-noreturn-warning": false,
+	"debug": {
+		"enable-debug-logging": false,
+		"danger-zone": {
+			"comment": [
+				"WARNING!",
+				"ONLY CHANGE THESE VALUES IF YOU KNOW THAT YOU ARE DOING!",
+				"THEY MAY CAUSE SYSTEM CRASHES/LOSS OF DATA."
+			],
+			"allow-os-crash": false,
+			"error-dumps": {
+				"comment": [
+					"For dump-file, the allowed placeholders are OK:",
+					" --> Current date"
+				],
+				"enable-error-dumps": false,
+				"dump-file": "/data/.configs/dump.json",
+				"dump-everything": true
+			}
+		}
+	},
+	"username": "damienos",
+	"password-sha256": "6b3a55e0261b0304143f805a24924d0c1c44524821305f31d9277843b8a10f4e"
+}

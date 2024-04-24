@@ -1,0 +1,18 @@
+{
+	"description": [
+		"This file is used for color configuration.  From here, you can change any color you want",
+		"in the OS.  Please note that 'STEP' colors are ignored after Boot/Begin Boot Process.  ",
+		"Configs are loaded first after boot starts.",
+		"SEE 'COLOR-ALLOW' for a list of allowed colors.  Invalid colors result in errors."],
+	"COLOR-ALLOW": ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"],
+
+	"logs": {
+		"info": "green",
+		"warn": "yellow",
+		"step": "cyan",
+		"error": "red",
+		"exec": "magenta",
+		"fatal": "white"
+	}
+}
+

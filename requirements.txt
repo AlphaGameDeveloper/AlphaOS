@@ -1,0 +1,5 @@
+termcolor
+prettytable
+whiptail
+whiptail-dialogs
+cowsay
