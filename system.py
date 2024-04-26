@@ -5,9 +5,16 @@ class SystemData:
 	def __init__(self):
 		self.config = None
 
+	def reload(self, quiet=False):
+		self.config = shared.jsonLoad("/data/.config/main.json", silent=quiet)
+		self.colorconf = shared.jsonLoad("/data/.config/colorconf.json", silent=quiet)
+		self.build = {
+			"number": open("/buildct").read().replace("\n",""),
+			"time": open("/buildtm").read().replace("\n", "")}
+
 	def init(self):
-		self.config = shared.jsonLoad("/data/.config/main.json")
-		self.colorconf = shared.jsonLoad("/data/.config/colorconf.json")
+		self.config = shared.jsonLoad("/data/.config/main.json", silent=False)
+		self.colorconf = shared.jsonLoad("/data/.config/colorconf.json", silent=False)
 		self.build = {
 			"number": open("/buildct").read().replace("\n",""),
 			"time": open("/buildtm").read().replace("\n", "")}

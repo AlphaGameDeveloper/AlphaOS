@@ -33,36 +33,36 @@ logger = log.logger # im lazy lol
 whiptail = Whiptail(title="DamienOS", backtitle="DamienOS build {}".format(open("/buildct","r").read().replace("\n","")))
 _info, _error, _warn, _fatal, _exec, __time = 0, 0, 0, 0, 0, 0
 
-def jsonLoad(f, fixData:dict=None):
-	logger.info("Beginning load of JSON file <{0}>".format(f))
-	logger.info("....Beginning pre-load of file")
+def jsonLoad(f, fixData:dict=None, silent=False):
+	logger.info("Beginning load of JSON file <{0}>".format(f), silent=silent)
+	logger.info("....Beginning pre-load of file", silent=silent)
 	if os.path.isfile(f) == False:
-		logger.error("........File does not exist :(")
+		logger.error("........File does not exist :(", silent=silent)
 		if fixData == None:
-			logger.fatal("........Exiting, error is not recoverable.  I DONT WANNA DIE!")
+			logger.fatal("........Exiting, error is not recoverable.  I DONT WANNA DIE!", silent=silent)
 			raise FileNotFoundError("aint not existing :/")
-		logger.warn("............Beginning auto-fix attempt")
+		logger.warn("............Beginning auto-fix attempt", silent=silent)
 		presubstep = logger.sstep
 		_curstep = logger.cstep
 		_substep = logger.sstep
-		logger.step("Fix broken JSON file")
-		logger.substep("Diagnose error")
-		logger.warn("............Diagnosing error")
+		logger.step("Fix broken JSON file", silent=silent)
+		logger.substep("Diagnose error", silent=silent)
+		logger.warn("............Diagnosing error", silent=silent)
 		if os.path.isfile(f) == False:
-			logger.warn("................The file does not exist")
+			logger.warn("................The file does not exist", silent=silent)
 		logger.substep("Fixing file")
-		logger.warn("............Recreating the file as it is broken or does not exist.")
+		logger.warn("............Recreating the file as it is broken or does not exist.", silent=silent)
 		with open(f, "w") as _f:
 			json.dump(fixData, _f)
-		logger.substep("All done")
+		logger.substep("All done", silent=silent)
 		logger.step(_curstep)
 		logger.substep(_substep)
-		logger.warn("................All done!  Returning to normal execution!")
+		logger.warn("................All done!  Returning to normal execution!", silent=silent)
 	fi = open(f, "r")
-	logger.info("........Pre-load successful")
-	logger.info("....Loading file")
+	logger.info("........Pre-load successful", silent=silent)
+	logger.info("....Loading file", silent=silent)
 	j = json.load(fi)
-	logger.info("....Load OK, no errors found.")
+	logger.info("....Load OK, no errors found.", silent=silent)
 	return j
 
 

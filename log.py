@@ -46,51 +46,58 @@ class CommandLogger:
 #circimport-->		self.write = system.data.get("main/debug/danger-zone")
 		self.info("Logger has finished initalizing!")
 
-	def info(self, text, noct=False):
+	def info(self, text, noct=False, silent=False):
+		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("INFO", (
 		"green" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["info"])), text))
 		if not noct:
 			global _info
 			_info += 1
 
-	def exec(self, text):
+	def exec(self, text, silent=False):
+		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("EXEC", (
 		"magenta" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["exec"])), text))
 		global _exec
 		_exec += 1
 
-	def time(self, text):
+	def time(self, text, silent=False):
+		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("TIME", (
 		"cyan" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["time"])), text))
 		global __time
 		__time += 1
 
-	def error(self, text):
+	def error(self, text, silent=False):
+		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("ERR!", (
 		"red" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["error"])), text))
 		global _error
 		_error += 1
 
-	def warn(self, text):
+	def warn(self, text, silent=False):
+		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("WARN", (
 		"yellow" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["warn"])), text))
 		global _warn
 		_warn += 1
 
-	def fatal(self, text):
+	def fatal(self, text, silent=False):
+		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("FATL", (
 		"yellow" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["fatal"]), "on_red"), text))
 		global _fatal
 		_fatal += 1
 
-	def step(self, step):
+	def step(self, step, silent=False):
 		self.cstep = step
 		print("[{0}]  Reached target <{1}>".format(termcolor.colored("STEP", (
 		"cyan" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["step"])), self.cstep))
   
-	def substep(self, step):
+	def substep(self, step, silent=False):
 		global sstep
 		self.sstep = step
+		if silent: return
 		print("[{0}]  Reached subtarget <{1}/{2}>".format(termcolor.colored("STEP", (
 		"cyan" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["step"])), self.cstep, self.sstep))
 

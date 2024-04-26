@@ -127,4 +127,6 @@ handler.add_command("sleep", commands.sleep, "[time]", "Delay execution [time] s
 handler.add_command("system", system.handler.system, "(see docs)", "Change system information", "You must use PLEASE")
 handler.add_command("please", lambda:nocmd, "<COMMAND>", "Privileged Level Execution Authorization and Security Escalation", "For please-enabled commands")
 handler.add_command("cowsay", commands.cowsay, "<text>", "cows are meant to talk", "")
-handler.add_command("regview", commands.regview, "<key>", "Check registry value!")
+# handler.add_command("regview", commands.regview, "<key>", "Check registry value!")
+handler.add_command("registry", commands.registry, "[set,view]", "Registry commands")
+handler.add_command("rm", commands.rm, "[file]", "Delete a file!")

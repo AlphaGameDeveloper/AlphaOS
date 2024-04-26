@@ -149,6 +149,44 @@ def cowsay(ctx, args):
 	_cowsay.cow(r)
 	return 0
 
-def regview(ctx, args):
-	shared.logger.info(args[1])
-	shared.logger.info(system.data.get(args[1]))
+def registry(ctx, args) -> int:
+	if len(args) < 2:
+		shared.logger.error("No subcommand given!")
+		shared.logger.error("Valid subcommands are:")
+		shared.logger.error("  - view (view a registry value)")
+		shared.logger.error("  - set (set a registry value)")
+		shared.logger.error("  - reload (reload the registry)")
+		return 0
+	
+	subcommand = args[1].lower()
+
+	if subcommand == "view":
+		if len(args) < 3:
+			shared.logger.error("You need to give a registry path!")
+			shared.logger.error("Usage: registry view (path)")
+			return 0
+		
+		try:
+			print(system.data.get(args[2]))
+			return 0
+		except ValueError as a:
+			shared.logger.error(repr(e))
+			
+	elif subcommand == "reload":
+		system.data.reload(quiet=True)
+		shared.logger.info("System registry reloaded!")
+	else:
+		shared.logger.error("Invalid subcommand!")
+		return 1
+
+def rm(ctx, args):
+	if len(args) < 2:
+		shared.logger.error("Need a file path to delete!")
+		shared.logger.error("Usage: rm <file>")
+		return 1
+	if os.path.isfile(args[1]):
+		os.remove(args[1])
+		return 0
+	else:
+		shared.logger.error("Sorry, but that file doesn't exist...")
+		return 1
