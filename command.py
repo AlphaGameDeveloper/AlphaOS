@@ -15,7 +15,6 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import shared
 from prettytable import PrettyTable
-import commands
 import time
 import sys
 import script
@@ -26,9 +25,9 @@ import please
 class CommandHandler:
 	def __init__(self):
 		self.KnownCommands = {}
-		self.add_command("Help", self.helpcommand, "<no arguments>", "Show system command help!", "Auto-updates")
+		self.add_command(self.helpcommand, "Help", "<no arguments>", "Show system command help!", "Auto-updates")
 
-	def add_command(self, name, function, args="", description="", notes="", pleaseNeeded=False):
+	def add_command(self, function, name, args="", description="", notes="", pleaseNeeded=False):
 		self.KnownCommands[name.lower()] = { # <== Capital letters in 'name' or the main command in the cli are ignored, unless they are arguments, at which point it is up to the command.
 			"name": name,
 			"command": function,
@@ -38,6 +37,13 @@ class CommandHandler:
 		}
 		return 0
 
+	def command(self, name="untitled", args="", description="", notes=""):
+		"""Decorator for add_command()"""
+		def decorator(function):
+			self.add_command(function, name, args, description, notes)
+			return function
+		return decorator
+		
 	def run_command(self, command, i=False, please=False):
 		"""Run a command!"""
 		self.please = please
@@ -113,21 +119,21 @@ handler = CommandHandler()
 
 # [== add commands here ==]
 # add_command(name, function, args="", description="", notes="")
-handler.add_command("Shell", commands.shell, "<none>", "Open the bash shell to do actually useful stuff.", notes="Exit to exit shell")
-handler.add_command("About", commands.about, "<none>", "Get DamienOS system information", notes="")
-handler.add_command("Script", script.holydscript, "<script>", "Run a Holy-D script!", "See documentation.")
-handler.add_command("ls", commands.ls, "<optional:directory>", "List files in the directory", "")
-handler.add_command("log", commands.log, "<type:info,warn,error,fatal,time>,[msg]", "Type MUST be valid")
-handler.add_command("mkdir", commands.mkdir, "<directory_name>", "Create a directory", "")
-handler.add_command("edit", commands.edit, "[file]", "Edit a file", "File can be blank")
-handler.add_command("Credits", commands.credits, "<none>", "Show the DamienOS credits", "")
-handler.add_command("echo", commands.echo, "[text]", "Echo text without fancy logging", "no color support")
-handler.add_command("cd", commands.cd, "[dir]", "Change the current working directory", "os.chdir(...)")
-handler.add_command("sleep", commands.sleep, "[time]", "Delay execution [time] seconds", "Must be int")
-handler.add_command("system", system.handler.system, "(see docs)", "Change system information", "You must use PLEASE")
-handler.add_command("please", lambda:nocmd, "<COMMAND>", "Privileged Level Execution Authorization and Security Escalation", "For please-enabled commands")
-handler.add_command("cowsay", commands.cowsay, "<text>", "cows are meant to talk", "")
-# handler.add_command("regview", commands.regview, "<key>", "Check registry value!")
-handler.add_command("registry", commands.registry, "[set,view]", "Registry commands")
-handler.add_command("rm", commands.rm, "[file]", "Delete a file!")
-handler.add_command("spinner", commands.spinner)
+# handler.add_command("Shell", commands.shell, "<none>", "Open the bash shell to do actually useful stuff.", notes="Exit to exit shell")
+# handler.add_command("About", commands.about, "<none>", "Get DamienOS system information", notes="")
+# handler.add_command("Script", script.holydscript, "<script>", "Run a Holy-D script!", "See documentation.")
+# handler.add_command("ls", commands.ls, "<optional:directory>", "List files in the directory", "")
+# handler.add_command("log", commands.log, "<type:info,warn,error,fatal,time>,[msg]", "Type MUST be valid")
+# handler.add_command("mkdir", commands.mkdir, "<directory_name>", "Create a directory", "")
+# handler.add_command("edit", commands.edit, "[file]", "Edit a file", "File can be blank")
+# handler.add_command("Credits", commands.credits, "<none>", "Show the DamienOS credits", "")
+# handler.add_command("echo", commands.echo, "[text]", "Echo text without fancy logging", "no color support")
+# handler.add_command("cd", commands.cd, "[dir]", "Change the current working directory", "os.chdir(...)")
+# handler.add_command("sleep", commands.sleep, "[time]", "Delay execution [time] seconds", "Must be int")
+# handler.add_command("system", system.handler.system, "(see docs)", "Change system information", "You must use PLEASE")
+# handler.add_command("please", lambda:nocmd, "<COMMAND>", "Privileged Level Execution Authorization and Security Escalation", "For please-enabled commands")
+# handler.add_command("cowsay", commands.cowsay, "<text>", "cows are meant to talk", "")
+# # handler.add_command("regview", commands.regview, "<key>", "Check registry value!")
+# handler.add_command("registry", commands.registry, "[set,view]", "Registry commands")
+# handler.add_command("rm", commands.rm, "[file]", "Delete a file!")
+# handler.add_command("spinner", commands.spinner)
