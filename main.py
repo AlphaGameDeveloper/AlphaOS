@@ -79,7 +79,7 @@ def cli():
 
 		if system.data.get("main/display-postcommand-summary"):
 			shared.logger.exec("."*50)
-			shared.logger.exec("Query {0}; Time={1}ms".format(("OK" if ok == True else "NOT OK"), round((time.perf_counter() - start_time)*100, 2)))
+			shared.logger.exec("Query {0}; Time={1}ms".format(("OK" if ok == True else "NOT OK"), round((time.perf_counter() - start_time)*10, 2)))
 
 def pinkScreenGUI():
 	shared.whiptail.msgbox("""              _

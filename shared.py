@@ -21,17 +21,13 @@ import sys
 import log
 from whiptail import Whiptail
 
-global _info
-global _error
-global _warn
-global _fatal
-global _exec
-global __time
 global logger
+
+
+SPINNER_FRAMES = ["-", "\\", "|", "/"]
 
 logger = log.logger # im lazy lol
 whiptail = Whiptail(title="DamienOS", backtitle="DamienOS build {}".format(open("/buildct","r").read().replace("\n","")))
-_info, _error, _warn, _fatal, _exec, __time = 0, 0, 0, 0, 0, 0
 
 def jsonLoad(f, fixData:dict=None, silent=False):
 	logger.info("Beginning load of JSON file <{0}>".format(f), silent=silent)

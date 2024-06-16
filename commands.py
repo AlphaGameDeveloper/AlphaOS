@@ -22,6 +22,7 @@ import os
 import termcolor
 import time
 import whiptail
+import sys
 import system
 
 def shell(ctx, args=None):
@@ -190,3 +191,9 @@ def rm(ctx, args):
 	else:
 		shared.logger.error("Sorry, but that file doesn't exist...")
 		return 1
+
+def spinner(ctx, args):
+	while True:
+		for frame in shared.SPINNER_FRAMES:
+			sys.stdout.write("\r%s" % frame)
+			time.sleep(.1)

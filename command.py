@@ -130,3 +130,4 @@ handler.add_command("cowsay", commands.cowsay, "<text>", "cows are meant to talk
 # handler.add_command("regview", commands.regview, "<key>", "Check registry value!")
 handler.add_command("registry", commands.registry, "[set,view]", "Registry commands")
 handler.add_command("rm", commands.rm, "[file]", "Delete a file!")
+handler.add_command("spinner", commands.spinner)
