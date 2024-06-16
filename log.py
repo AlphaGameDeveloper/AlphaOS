@@ -20,17 +20,9 @@ import json
 import sys
 #import system
 
-global _info
-global _error
-global _warn
-global _fatal
-global _exec
-global __time
-global logger
-_info, _error, _warn, _fatal, _exec, __time = 0, 0, 0, 0, 0, 0
-
 class CommandLogger:
 	def __init__(self, useconfig=True, broadcastInit=False):
+		self.INFO, self.ERROR, self.WARN, self.FATAL, self.EXEC, self.TIME = [0 for a in range(6)]
 		if useconfig == True:
 			try:
 				with open("/data/.config/colorconf.json", "r") as f:
@@ -51,49 +43,42 @@ class CommandLogger:
 		print("[{0}]  {1}".format(termcolor.colored("INFO", (
 		"green" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["info"])), text))
 		if not noct:
-			global _info
-			_info += 1
+			self.INFO += 1
 
 	def exec(self, text, silent=False):
 		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("EXEC", (
 		"magenta" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["exec"])), text))
-		global _exec
-		_exec += 1
+		self.EXEC += 1
 
 	def time(self, text, silent=False):
 		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("TIME", (
 		"cyan" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["time"])), text))
-		global __time
-		__time += 1
+		self.TIME += 1
 
 	def error(self, text, silent=False):
 		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("ERR!", (
 		"red" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["error"])), text))
-		global _error
-		_error += 1
+		self.ERROR += 1
 
 	def warn(self, text, silent=False):
 		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("WARN", (
 		"yellow" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["warn"])), text))
-		global _warn
-		_warn += 1
+		self.WARN += 1
 
 	def fatal(self, text, silent=False):
 		if silent: return
 		print("[{0}]  {1}".format(termcolor.colored("FATL", (
 		"yellow" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["fatal"]), "on_red"), text))
-		global _fatal
-		_fatal += 1
-
+		self.FATAL += 1
 	def step(self, step, silent=False):
 		self.cstep = step
 		print("[{0}]  Reached target <{1}>".format(termcolor.colored("STEP", (
 		"cyan" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["step"])), self.cstep))
-  
+
 	def substep(self, step, silent=False):
 		global sstep
 		self.sstep = step

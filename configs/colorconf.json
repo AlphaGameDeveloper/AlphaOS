@@ -12,7 +12,8 @@
 		"step": "cyan",
 		"error": "red",
 		"exec": "magenta",
-		"fatal": "white"
+		"fatal": "white",
+		"time": "grey"
 	}
 }
 

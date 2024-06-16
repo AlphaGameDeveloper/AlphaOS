@@ -62,8 +62,11 @@ def cli():
 		dir = os.getcwd()
 		cmd = input("{0}> [{1}] -->".format(termcolor.colored(username, "red"), termcolor.colored(("~" if dir == "/data" else dir), "blue")))
 		try:
+			start_time = time.perf_counter()
 			command.handler.run_command(cmd)
+			ok = True
 		except Exception as e:
+			ok = False
 			shared.logger.error("Error! Type={}".format(
 							type(e).__name__))
 			for i in range(5):
@@ -74,11 +77,9 @@ def cli():
 			shared.logger.warn("Internal error hash SHA256: {}".format(hash(e)))
 
 
-
-	debug = (True if os.getenv("DEBUG") else False)
-	if debug:
-		exec("."*50)
-		_time("Query {0}; Time={1}s".format(("OK" if ok == True else "NOT OK"), time.perf_counter() - start_time))
+		if system.data.get("main/display-postcommand-summary"):
+			shared.logger.exec("."*50)
+			shared.logger.exec("Query {0}; Time={1}ms".format(("OK" if ok == True else "NOT OK"), round((time.perf_counter() - start_time)*100, 2)))
 
 def pinkScreenGUI():
 	shared.whiptail.msgbox("""              _
@@ -99,4 +100,5 @@ def begin():
 		pinkScreenGUI()
 		begin()
 
-begin()
+if __name__ == "__main__":
+	begin()
