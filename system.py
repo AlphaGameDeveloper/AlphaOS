@@ -1,5 +1,6 @@
 import shared
 import whiptail
+import json
 
 class SystemData:
 	def __init__(self):
@@ -42,12 +43,17 @@ class SystemData:
 					cl[a] = value
 					return
 				cl = cl[a]
-
-
 		except Exception as e:
 			shared.logger.error("Cannot set system key <{0}> due to <{1}>".format(location, e))
 			raise e
-			return
+		
+	def save(self):
+		with open("/data/.config/main.json", "w") as f:
+			json.dump(self.config["main"], f)
+		with open("/data/.config/colorconf.json", "w") as f:
+			json.dump(self.colorconf, f)
+
+		
 
 	def get(self, location):
 		try:

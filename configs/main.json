@@ -5,7 +5,7 @@
 	],
 	"display-nonzero-warning": false,
 	"display-noreturn-warning": false,
-	"display-postcommand-summary": true,
+	"display-postcommand-summary": false,
 	"debug": {
 		"enable-debug-logging": false,
 		"danger-zone": {

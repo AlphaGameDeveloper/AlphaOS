@@ -49,6 +49,7 @@ def credits(ctx, args):
 	print("		* Debian base; Canonical corp. Ubuntu")
 	return 0
 
+@handler.command("sleep", "Sleep for a specified amount of time")
 def sleep(ctx, args):
 	if len(args) < 2:
 		shared.logger.error("No time specified")
@@ -61,6 +62,7 @@ def sleep(ctx, args):
 		return 1
 	return 0
 
+@handler.command("cowsay", "The traditional cowsay command from Linux!")
 def cowsay(ctx, args):
 	if len(args) < 2:
 		shared.logger.error("Usage: cowsay <text>")
@@ -71,6 +73,7 @@ def cowsay(ctx, args):
 	_cowsay.cow(r)
 	return 0
 
+@handler.command("registry", "View and set system registry values")
 def registry(ctx, args) -> int:
 	if len(args) < 2:
 		shared.logger.error("No subcommand given!")
@@ -97,6 +100,16 @@ def registry(ctx, args) -> int:
 	elif subcommand == "reload":
 		system.data.reload(quiet=True)
 		shared.logger.info("System registry reloaded!")
+	
+	elif subcommand == "set":
+		if len(args) < 4:
+			shared.logger.error("You need to give a registry path and value!")
+			shared.logger.error("Usage: registry set (path) (value)")
+			return 0
+		system.data.set(args[2], args[3])
+		
+		shared.logger.info("Registry value set!")
+		return 0
 	else:
 		shared.logger.error("Invalid subcommand!")
 		return 1

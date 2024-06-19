@@ -74,10 +74,14 @@ class CommandHandler:
 			if (cmd[0] == "script") and (i == True):
 				shared.logger.error("You cannot run a script from a script!")
 				return 1
-			s = self.KnownCommands[cmd[0]]["command"](self, cmd) # ==> It passes in the script name as well, just as sys.argv.
+			s = self.KnownCommands[cmd[0]]["command"] # ==> It passes in the script name as well, just as sys.argv.
 		except KeyError:
 			shared.logger.error("?SYNTAX error?  The command \"{0}\" is not a command, operable program, or Holy-D script.".format(cmd[0]))
 			return 1
+		
+		try:
+			# run it
+			s(self, cmd)
 		except Exception as e:
 			# TODO fix migration to ctx/context systems.
 			shared.logger.error("?FUNCTION error? The command \"{0}\" has encountered an error, so it cannot continue.".format(cmd[0]))
