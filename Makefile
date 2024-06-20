@@ -11,6 +11,8 @@ rm:
 run:
 	docker run --rm -it --name damienos alphagamedev/damienos
 
+small: rm
+	docker run --rm -it --name damienos -v .:/docker/ alphagamedev/damienos
 setupWorkspace:
 	mkdir build
 	echo "1" > build/buildct

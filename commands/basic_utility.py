@@ -18,7 +18,7 @@ from command import handler
 import subprocess
 import os
 import shared
-
+import termcolor
 @handler.command("shell", "Opens the BASH shell", "for when you want to do useful stuff lol")
 def shell(ctx, args=None):
 	"""Open BASH shell command
