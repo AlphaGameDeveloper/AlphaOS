@@ -20,6 +20,7 @@ import os
 import shared
 import termcolor
 import system
+import shutil
 
 @handler.command("shell", "Opens the BASH shell", "for when you want to do useful stuff lol")
 def shell(ctx, args=None):
@@ -185,3 +186,28 @@ def about(ctx, args):
     elif PREF == "Exit":
         return 0
     return 1
+
+@handler.command("whoami", "(no arguments)", "Just to help if you're having an identity crisis :)")
+def whoami(ctx, args):
+    print(system.data.get("main/username"))
+    return 0
+    
+@handler.command("pwd", "(no arguments)", "Get your current working directory")
+def cwd(ctx, args):
+    print(os.getcwd())
+    return 0
+
+@handler.command("copy", "[from] [to]", "Copy a file!")
+def copy(ctx, args):
+    _a = args[:]
+    del _a[0]
+    if len(args) < 2:
+        shared.logger.error("Usage: copy [source/from] [dist/to]")
+        return 1
+    if not os.path.isfile(_a[0]):
+        shared.logger.error("Source file \"%s\" doesn't exist!")
+        return 1
+    shutil.copy(_a[0], _a[1])
+    if system.data.get("main/display-verbose-output"):
+        print("Copied \"%s\" to \"%s\"." % (_a[0], _a[1]))
+    return 0
