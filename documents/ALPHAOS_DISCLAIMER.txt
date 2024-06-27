@@ -1,0 +1,47 @@
+AlphaOS (DamienOS) Legal Disclaimer
+
+---
+
+Introduction:
+
+This legal disclaimer governs the use of AlphaOS (also referred to as DamienOS), a hobby operating system based on Linux (Debian). By downloading, installing, using, or distributing AlphaOS, you agree to the terms and conditions set forth in this disclaimer. If you do not agree to these terms, do not use AlphaOS.
+
+No Warranty:
+
+AlphaOS is provided "as-is," without any express or implied warranties. This includes, but is not limited to, implied warranties of merchantability, fitness for a particular purpose, and non-infringement. AlphaOS is a hobby project and may contain bugs, errors, or other issues that could result in system failures, data loss, or other problems.
+
+Limitation of Liability:
+
+In no event shall the creator, developer, or any contributors to AlphaOS be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, loss of data, loss of profits, or business interruption) arising in any way out of the use, or inability to use, AlphaOS, even if advised of the possibility of such damages.
+
+Data Loss:
+
+The use of AlphaOS is at your own risk. The creator, developer, and contributors to AlphaOS do not assume any responsibility for any data loss or corruption that may occur as a result of using AlphaOS. It is strongly recommended that users back up their data regularly and take appropriate precautions to protect their data.
+
+Third-Party Software:
+
+AlphaOS may include or be used in conjunction with third-party software, libraries, or code. The use of any third-party software is subject to the terms and conditions of the respective third-party licenses. The creator, developer, and contributors to AlphaOS are not responsible for any issues arising from the use of third-party software.
+
+Modifications and Redistribution:
+
+Users are free to modify and redistribute AlphaOS, provided that all modifications and redistributions are done in compliance with applicable open-source licenses. However, the creator, developer, and contributors to AlphaOS are not responsible for any issues that may arise from such modifications or redistributions.
+
+Governing Law:
+
+This disclaimer and any disputes arising out of or related to the use of AlphaOS shall be governed by and construed in accordance with the laws of the jurisdiction in which the creator resides, without regard to its conflict of law principles.
+
+Acceptance of Terms:
+
+By using AlphaOS, you acknowledge that you have read, understood, and agree to be bound by the terms and conditions of this disclaimer. If you do not agree to these terms, do not use AlphaOS.
+
+---
+
+Contact Information:
+
+If you have any questions or concerns regarding this disclaimer or AlphaOS, please contact Damien Boisvert at damien@alphagame.dev.  More information about DamienOS can be found at https://www.alphagame.dev/projects/alphaos/.
+
+---
+
+End of Disclaimer
+
+---

@@ -1,0 +1,8 @@
+How It Was Made
+---
+
+AlphaOS is a free, open-source, and pretty useless operating system from heck.  If there is anything that screams Linux, it's without doubt the command-line, and I believe that not many would disagree.
+
+AlphaOS started off as a Docker container, and is still tested this way.  After that, slap on a Linux kernel, sprinkle a initramfs, and boom.  AlphaOS is written in Python, suprisingly.  AlphaOS started off as my pathetic attempt at a command-line (and it might still be) and then it spiraled to the piece of software that we... either love or tolerate.  I'll leave it to you.
+
+AlphaOS was added to Git on April 23th, 2024 (commit e6be201), and it's code is on GitHub.
