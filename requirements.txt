@@ -3,3 +3,4 @@ prettytable
 whiptail
 whiptail-dialogs
 cowsay
+wget

@@ -205,9 +205,33 @@ def copy(ctx, args):
         shared.logger.error("Usage: copy [source/from] [dist/to]")
         return 1
     if not os.path.isfile(_a[0]):
-        shared.logger.error("Source file \"%s\" doesn't exist!")
+        shared.logger.error("Source file \"%s\" doesn't exist!" % _a[0])
         return 1
     shutil.copy(_a[0], _a[1])
     if system.data.get("main/display-verbose-output"):
         print("Copied \"%s\" to \"%s\"." % (_a[0], _a[1]))
     return 0
+
+@handler.command("whereis", "[command]", "Show the qualified name of a command", alias=["which"])
+def whereis(ctx, args):
+    # oh hey a command that actually uses ctx
+    if len(args) < 2:
+        shared.logger.error("Usage: whereis [command]")
+        return 1
+    try:
+        c = ctx.KnownCommands[args[1]]
+    except ValueError:
+        shared.logger.error("Not a valid command.")
+        return 1
+    o = ""
+    if c["type"] == "alias":
+        o = o + "%s -> " % args[1]
+
+    
+        c = ctx.KnownCommands[c["target"]]
+    
+    o = o + "%s --> %s" % (c["name"], c["command"].__name__)
+
+    print(o)
+    return 0
+    

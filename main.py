@@ -23,6 +23,7 @@ import subprocess
 import command
 import commands.commands
 import commands.basic_utility
+import commands.www
 import shared
 import system
 #from whiptail import Whiptail

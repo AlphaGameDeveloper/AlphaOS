@@ -2,15 +2,15 @@ FROM python:3.8
 
 WORKDIR /docker
 
-RUN apt update && apt install nano wget whiptail -y
+RUN apt update && apt install nano wget whiptail lynx -y
 
 COPY requirements.txt /docker
 
 RUN /usr/local/bin/python3 -m pip install -r /docker/requirements.txt
 
-ARG BUILD=undefined
+ARG BUILD=unknown
 
-ARG TIME=undefined
+ARG TIME=unknown
 
 RUN echo "$BUILD" > /buildct && echo "$TIME" > /buildtm
 
