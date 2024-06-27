@@ -19,6 +19,8 @@ import subprocess
 import os
 import shared
 import termcolor
+import system
+
 @handler.command("shell", "Opens the BASH shell", "for when you want to do useful stuff lol")
 def shell(ctx, args=None):
 	"""Open BASH shell command
@@ -36,6 +38,7 @@ def ls(ctx, args):
 		dir = args[1]
 
 	l = os.listdir(dir)
+	print("Total %s" % len(l))
 	for i in l:
 		if os.path.isfile(i):
 			print("[FILE]  {0}".format(i))
@@ -49,7 +52,19 @@ def mkdir(ctx, args):
 		shared.logger.error("You need to give a directory name!")
 		shared.logger.error("Usage: mkdir <directory_name>")
 		return
-	subprocess.call(["mkdir", args[1]])
+
+	_args = args[:]
+	del _args[0]
+	for entry in _args:
+		if entry == "":
+			continue
+		if os.path.isdir(entry):
+			print("Directory %s already exists, skipping it." % entry)
+			continue 
+		os.mkdir(entry)
+		if system.data.get("main/display-verbose-output"):
+			print("Created directory %s" % entry)
+
 	return 0
 
 @handler.command("log", "<type:info,warn,error,fatal,time> [message]", "Logs with special formatting")
@@ -88,6 +103,31 @@ def edit(ctx, args):
 	subprocess.call("/bin/nano {}".format(file), shell=True)
 	return 0
 
+@handler.command("remove", "[files]", "Remove some files")
+def remove(ctx, args):
+	if len(args) < 2:
+		shared.logger.error("One or more files must be specified.")
+		return 1
+	
+	_args = args[:]
+	del _args[0]
+	for entry in _args:
+		if os.path.isdir(entry):
+			try:
+				os.removedirs(entry)
+				if system.data.get("main/display-verbose-output"):
+					print("Removed directory %s" % entry)
+			except OSError:
+				print("%s: Directory not empty" % entry)
+				continue
+		elif os.path.isfile(entry):
+			os.remove(entry)
+			if system.data.get("main/display-verbose-output"):
+				print("Removed regular file %s" % entry)
+		else:
+			print("%s does not exist." % entry)
+	return 0
+
 @handler.command("echo", "[text]", "Echo text without extra formatting")
 def echo(ctx, args):
 	del args[0]
@@ -107,3 +147,41 @@ def cd(ctx, args):
 		shared.logger.error("cd: '{}' is not a directory!".format(args[1]))
 		return 1
 	return 0
+
+@handler.command("catalog", "[file]", "(cat) read a file")
+def catalog(ctx, args):
+	if len(args) < 2:
+		shared.logger.error("Usage: catalog [file]")
+		return 1
+
+	if not os.path.isfile(args[1]):
+		shared.logger.error("File %s does not exist." % args[1])
+		return 1
+
+	with open(args[1]) as f:
+		print(f.read())
+		return 0
+
+
+@handler.command("about", "(no arguments)", "About AlphaOS and legal mumbo jumbo")
+def about(ctx, args):
+    PREF, CODE = shared.whiptail.menu("Please select an option to learn more about AlphaOS.", [
+        "How it Was Made",
+        "Credits",
+        "Legal Disclaimer",
+        "Exit"
+    ])
+    if system.data.get("main/display-verbose-output"):
+        print("verbose: Recieved message preference: \"{0}\", and recieved Whiptail code {1}.".format(PREF, CODE))
+    if PREF == "How it Was Made":
+        shared.whiptail.textbox("/docker/documents/HOW_IT_WAS_MADE.txt")
+        return 0
+    if PREF == "Credits":
+        shared.whiptail.textbox("/docker/documents/CREDITS.txt")
+        return 0
+    elif PREF == "Legal Disclaimer":
+        shared.whiptail.textbox("/docker/documents/ALPHAOS_DISCLAIMER.txt")
+        return 0
+    elif PREF == "Exit":
+        return 0
+    return 1

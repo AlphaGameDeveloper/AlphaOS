@@ -3,11 +3,11 @@
 		"DamienOS main configuration file",
 		"Unset values are None"
 	],
+	"display-verbose-output": false,
 	"display-nonzero-warning": false,
 	"display-noreturn-warning": false,
 	"display-postcommand-summary": false,
 	"debug": {
-		"enable-debug-logging": false,
 		"danger-zone": {
 			"comment": [
 				"WARNING!",
@@ -29,3 +29,4 @@
 	"username": "damienos",
 	"password-sha256": "6b3a55e0261b0304143f805a24924d0c1c44524821305f31d9277843b8a10f4e"
 }
+

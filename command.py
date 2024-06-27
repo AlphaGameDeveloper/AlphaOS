@@ -13,6 +13,7 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import shared
 from prettytable import PrettyTable
 import time
@@ -81,7 +82,7 @@ class CommandHandler:
 		
 		try:
 			# run it
-			s(self, cmd)
+			command_result = s(self, cmd)
 		except Exception as e:
 			# TODO fix migration to ctx/context systems.
 			shared.logger.error("?FUNCTION error? The command \"{0}\" has encountered an error, so it cannot continue.".format(cmd[0]))
@@ -95,13 +96,13 @@ class CommandHandler:
 			shared.logger.error("====> Error line: {0}".format(traceback.tb_lineno))
 			shared.logger.error("====> Error file: {0}".format(fname))
 			return 1
-		if s == None and system.data.get("main/display-noreturn-warning"):
+		if command_result == None and system.data.get("main/display-noreturn-warning"):
 			shared.logger.warn("This command did not return a exit code; it either returned None or")
 			shared.logger.warn("ended without a return statement.")
 			return 0
 		else:
-			if s != 0 and system.data.get("main/display-nonzero-warning") == True:
-				shared.logger.warn("Script ended with a non-zero return code ({0}).".format(s))
+			if command_result != 0 and system.data.get("main/display-nonzero-warning") == True:
+				shared.logger.warn("Script ended with a non-zero return code ({0}).".format(command_result))
 				return
 
 	# Help command -- it is the only command that is defined in this file/class.
@@ -116,28 +117,5 @@ class CommandHandler:
 		print(t)
 		return 0
 
-def nocmd(ctx, args):
-	pass
 # make default instance.
 handler = CommandHandler()
-
-# [== add commands here ==]
-# add_command(name, function, args="", description="", notes="")
-# handler.add_command("Shell", commands.shell, "<none>", "Open the bash shell to do actually useful stuff.", notes="Exit to exit shell")
-# handler.add_command("About", commands.about, "<none>", "Get DamienOS system information", notes="")
-# handler.add_command("Script", script.holydscript, "<script>", "Run a Holy-D script!", "See documentation.")
-# handler.add_command("ls", commands.ls, "<optional:directory>", "List files in the directory", "")
-# handler.add_command("log", commands.log, "<type:info,warn,error,fatal,time>,[msg]", "Type MUST be valid")
-# handler.add_command("mkdir", commands.mkdir, "<directory_name>", "Create a directory", "")
-# handler.add_command("edit", commands.edit, "[file]", "Edit a file", "File can be blank")
-# handler.add_command("Credits", commands.credits, "<none>", "Show the DamienOS credits", "")
-# handler.add_command("echo", commands.echo, "[text]", "Echo text without fancy logging", "no color support")
-# handler.add_command("cd", commands.cd, "[dir]", "Change the current working directory", "os.chdir(...)")
-# handler.add_command("sleep", commands.sleep, "[time]", "Delay execution [time] seconds", "Must be int")
-# handler.add_command("system", system.handler.system, "(see docs)", "Change system information", "You must use PLEASE")
-# handler.add_command("please", lambda:nocmd, "<COMMAND>", "Privileged Level Execution Authorization and Security Escalation", "For please-enabled commands")
-# handler.add_command("cowsay", commands.cowsay, "<text>", "cows are meant to talk", "")
-# # handler.add_command("regview", commands.regview, "<key>", "Check registry value!")
-# handler.add_command("registry", commands.registry, "[set,view]", "Registry commands")
-# handler.add_command("rm", commands.rm, "[file]", "Delete a file!")
-# handler.add_command("spinner", commands.spinner)

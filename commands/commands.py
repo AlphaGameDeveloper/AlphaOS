@@ -26,28 +26,28 @@ import sys
 import system
 from command import handler
 
-@handler.command(name="about", description="About AlphaOS!")
-def about(ctx, args=None):
-	"""Show DamienOS info
-	@args none"""
-	t = PrettyTable()
-	print("[== DamienOS system information ==]")
-	t.field_names = ["Field", "Value"]
-	t.add_row(["Build Number", open("/buildct", "r").read().replace("\n","")])
-	t.add_row(["Build time  ", open("/buildtm", "r").read().replace("\n","")])
-	print(t)
-	return 0
+#@handler.command(name="about", description="About AlphaOS!")
+#def about(ctx, args=None):
+#	"""Show DamienOS info
+#	@args none"""
+#	t = PrettyTable()
+#	print("[== DamienOS system information ==]")
+#	t.field_names = ["Field", "Value"]
+#	t.add_row(["Build Number", open("/buildct", "r").read().replace("\n","")])
+#	t.add_row(["Build time  ", open("/buildtm", "r").read().replace("\n","")])
+#	print(t)
+#	return 0
 
-@handler.command("credits", description="AlphaOS credits")
-def credits(ctx, args):
-	print("+" + "-"*50 + "+")
-	print("|" + "DAMIENOS CREDITS".center(50) + "|")
-	print("+" + "-"*50 + "+")
-	print("This project would not be possible without the amazing help of these people!")
-	print("	* Programming: Damien Boisvert")
-	print("	* Linux (Debian) base: The Linux foundation & Linus Torvalds")
-	print("		* Debian base; Canonical corp. Ubuntu")
-	return 0
+#@handler.command("credits", description="AlphaOS credits")
+#def credits(ctx, args):
+#	print("+" + "-"*50 + "+")
+#	print("|" + "DAMIENOS CREDITS".center(50) + "|")
+#	print("+" + "-"*50 + "+")
+#	print("This project would not be possible without the amazing help of these people!")
+#	print("	* Programming: Damien Boisvert")
+#	print("	* Linux (Debian) base: The Linux foundation & Linus Torvalds")
+#	print("		* Debian base; Canonical corp. Ubuntu")
+#	return 0
 
 @handler.command("sleep", "Sleep for a specified amount of time")
 def sleep(ctx, args):

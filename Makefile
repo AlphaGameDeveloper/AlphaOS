@@ -8,11 +8,14 @@ docker:
 rm:
 	docker container rm damienos -f
 
-run:
+run: rm docker container
+
+container:
 	docker run --rm -it --name damienos alphagamedev/damienos
 
 small: rm
-	docker run --rm -it --name damienos -v .:/docker/ alphagamedev/damienos
+	docker run --rm -it --name damienos -v .:/docker/ -v ./configs:/data/.config alphagamedev/damienos
+
 setupWorkspace:
 	mkdir build
 	echo "1" > build/buildct

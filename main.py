@@ -60,9 +60,14 @@ def cli():
 		shared.logger.warn("==> WARNING: PASSWORD IS SET TO DEFAULT!  DO 'please passwd' TO CHANGE IT!")
 		shared.logger.warn("====> Password = 'password'")
 	while True:
+		ok = True
+		blank = False
 		username = system.data.get("main/username")
 		dir = os.getcwd()
 		cmd = input("{0}> [{1}] -->".format(termcolor.colored(username, "red"), termcolor.colored(("~" if dir == "/data" else dir), "blue")))
+		if cmd.strip() == "":
+			blank = True
+
 		try:
 			start_time = time.perf_counter()
 			command.handler.run_command(cmd)
@@ -71,6 +76,7 @@ def cli():
 			ok = False
 			shared.logger.error("Error! Type={}".format(
 							type(e).__name__))
+
 			for i in range(5):
 				sys.stdout.write("\rRecovering from fatal error.   ETA={}".format(i+1))
 				time.sleep(1)
@@ -79,7 +85,7 @@ def cli():
 			shared.logger.warn("Internal error hash SHA256: {}".format(hash(e)))
 
 
-		if system.data.get("main/display-postcommand-summary"):
+		if system.data.get("main/display-postcommand-summary") and not blank:
 			shared.logger.exec("."*50)
 			shared.logger.exec("Query {0}; Time={1}ms".format(("OK" if ok == True else "NOT OK"), round((time.perf_counter() - start_time)*10, 2)))
 
@@ -103,4 +109,5 @@ def begin():
 		begin()
 
 if __name__ == "__main__":
+	shared.whiptail.textbox("/docker/documents/ALPHAOS_DISCLAIMER.txt")
 	begin()
