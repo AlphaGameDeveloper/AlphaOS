@@ -74,16 +74,7 @@ def cli():
 			ok = True
 		except Exception as e:
 			ok = False
-			shared.logger.error("Error! Type={}".format(
-							type(e).__name__))
-
-			for i in range(5):
-				sys.stdout.write("\rRecovering from fatal error.   ETA={}".format(i+1))
-				time.sleep(1)
-			sys.stdout.write("\n")
-			shared.logger.info("Saved traceback... Save successful.")
-			shared.logger.warn("Internal error hash SHA256: {}".format(hash(e)))
-
+			shared.logger.error(repr(e))
 
 		if system.data.get("main/display-postcommand-summary") and not blank:
 			shared.logger.exec("."*50)

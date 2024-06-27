@@ -28,20 +28,27 @@ class CommandHandler:
 		self.KnownCommands = {}
 		self.add_command(self.helpcommand, "Help", "<no arguments>", "Show system command help!", "Auto-updates")
 
-	def add_command(self, function, name, args="", description="", notes="", pleaseNeeded=False):
+	def add_command(self, function, name, args="", description="", notes="", alias=[], pleaseNeeded=False):
 		self.KnownCommands[name.lower()] = { # <== Capital letters in 'name' or the main command in the cli are ignored, unless they are arguments, at which point it is up to the command.
+            "type": "command",
 			"name": name,
 			"command": function,
 			"description": description,
 			"args": args,
-			"notes": notes
+			"notes": notes,
+			"alias": alias
 		}
+		for a in alias:
+		    self.KnownCommands[a.lower()] = {
+		        "type": "alias",
+		        "target": name.lower()
+		    }
 		return 0
 
-	def command(self, name="untitled", args="", description="", notes=""):
+	def command(self, name="untitled", args="", description="", notes="", alias=[]):
 		"""Decorator for add_command()"""
 		def decorator(function):
-			self.add_command(function, name, args, description, notes)
+			self.add_command(function, name, args, description, notes, alias)
 			return function
 		return decorator
 		
@@ -75,7 +82,10 @@ class CommandHandler:
 			if (cmd[0] == "script") and (i == True):
 				shared.logger.error("You cannot run a script from a script!")
 				return 1
-			s = self.KnownCommands[cmd[0]]["command"] # ==> It passes in the script name as well, just as sys.argv.
+			target = self.KnownCommands[cmd[0]]
+			if target["type"] == "alias":
+			    target = self.KnownCommands[target["target"]]
+			s = target["command"]
 		except KeyError:
 			shared.logger.error("?SYNTAX error?  The command \"{0}\" is not a command, operable program, or Holy-D script.".format(cmd[0]))
 			return 1
@@ -108,12 +118,14 @@ class CommandHandler:
 	# Help command -- it is the only command that is defined in this file/class.
 	def helpcommand(self, ctx, args):
 		t = PrettyTable()
-		t.field_names = ["Command","Arguments","Description","Notes"]
+		t.field_names = ["Command","Arguments","Description","Notes", "Aliases"]
 		t.align["Description"] = "l"
 		t.align["Notes"] = "l"
 		for b in self.KnownCommands.keys():
 			a = self.KnownCommands[b]
-			t.add_row([a["name"],a["args"],a["description"],a["notes"]])
+			if a["type"] == "alias": continue # alias will not be put in it's own row!
+			
+			t.add_row([a["name"],a["args"],a["description"],a["notes"], ", ".join(a["alias"])])
 		print(t)
 		return 0
 

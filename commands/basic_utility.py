@@ -22,7 +22,7 @@ import termcolor
 import system
 import shutil
 
-@handler.command("shell", "Opens the BASH shell", "for when you want to do useful stuff lol")
+@handler.command("shell", "Opens the BASH shell", "for when you want to do useful stuff lol", alias=["sh"])
 def shell(ctx, args=None):
 	"""Open BASH shell command
 	@args none"""
@@ -95,7 +95,7 @@ def log(ctx, args):
 		return 1
 	return 0
 
-@handler.command("edit", "[file]", "Literally the nano editor")
+@handler.command("edit", "[file]", "Literally the nano editor", alias=["nano"])
 def edit(ctx, args):
 	if len(args) < 2:
 		file = ""
@@ -104,7 +104,7 @@ def edit(ctx, args):
 	subprocess.call("/bin/nano {}".format(file), shell=True)
 	return 0
 
-@handler.command("remove", "[files]", "Remove some files")
+@handler.command("remove", "[files]", "Remove some files", alias=["rm"])
 def remove(ctx, args):
 	if len(args) < 2:
 		shared.logger.error("One or more files must be specified.")
@@ -149,7 +149,7 @@ def cd(ctx, args):
 		return 1
 	return 0
 
-@handler.command("catalog", "[file]", "(cat) read a file")
+@handler.command("catalog", "[file]", "(cat) read a file", alias=["cat"])
 def catalog(ctx, args):
 	if len(args) < 2:
 		shared.logger.error("Usage: catalog [file]")
@@ -197,7 +197,7 @@ def cwd(ctx, args):
     print(os.getcwd())
     return 0
 
-@handler.command("copy", "[from] [to]", "Copy a file!")
+@handler.command("copy", "[from] [to]", "Copy a file!", alias=["cp"])
 def copy(ctx, args):
     _a = args[:]
     del _a[0]
