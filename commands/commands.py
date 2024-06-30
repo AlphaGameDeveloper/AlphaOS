@@ -26,29 +26,6 @@ import sys
 import system
 from command import handler
 
-#@handler.command(name="about", description="About AlphaOS!")
-#def about(ctx, args=None):
-#	"""Show DamienOS info
-#	@args none"""
-#	t = PrettyTable()
-#	print("[== DamienOS system information ==]")
-#	t.field_names = ["Field", "Value"]
-#	t.add_row(["Build Number", open("/buildct", "r").read().replace("\n","")])
-#	t.add_row(["Build time  ", open("/buildtm", "r").read().replace("\n","")])
-#	print(t)
-#	return 0
-
-#@handler.command("credits", description="AlphaOS credits")
-#def credits(ctx, args):
-#	print("+" + "-"*50 + "+")
-#	print("|" + "DAMIENOS CREDITS".center(50) + "|")
-#	print("+" + "-"*50 + "+")
-#	print("This project would not be possible without the amazing help of these people!")
-#	print("	* Programming: Damien Boisvert")
-#	print("	* Linux (Debian) base: The Linux foundation & Linus Torvalds")
-#	print("		* Debian base; Canonical corp. Ubuntu")
-#	return 0
-
 @handler.command("sleep", "Sleep for a specified amount of time")
 def sleep(ctx, args):
 	if len(args) < 2:
@@ -85,18 +62,32 @@ def registry(ctx, args) -> int:
 	
 	subcommand = args[1].lower()
 
-	if subcommand == "view":
+	if subcommand == "view" or subcommand == "get":
 		if len(args) < 3:
 			shared.logger.error("You need to give a registry path!")
 			shared.logger.error("Usage: registry view (path)")
 			return 0
 		
 		try:
-			print(system.data.get(args[2]))
-			return 0
-		except ValueError as a:
-			shared.logger.error(repr(e))
-			
+			d = system.data.get(args[2])
+		except Exception as e:
+			    print("Cannot get registry: %s" % repr(e))
+			    return 1
+		if isinstance(d, dict):
+			print("Dictionary Content")
+			for entry in d.keys():
+				ty = type(d[entry]).__name__
+				print("- %s (Type: %s)" % (entry, ty))
+		elif isinstance(d, list):
+			print("List Content")
+			for entry in d:
+				print("- %s" % entry)
+
+		else:
+			print(d)			
+		
+		return 0
+					
 	elif subcommand == "reload":
 		system.data.reload(quiet=True)
 		shared.logger.info("System registry reloaded!")
@@ -126,6 +117,7 @@ def rm(ctx, args):
 		shared.logger.error("Sorry, but that file doesn't exist...")
 		return 1
 
+@handler.command("spinner")
 def spinner(ctx, args):
 	while True:
 		for frame in shared.SPINNER_FRAMES:

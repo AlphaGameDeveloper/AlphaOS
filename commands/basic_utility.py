@@ -38,6 +38,9 @@ def ls(ctx, args):
 	else:
 		dir = args[1]
 
+	if not os.path.isdir(dir):
+		shared.logger.error("Directory \"%s\" doesn't exist!" % dir)
+		return 1
 	l = os.listdir(dir)
 	print("Total %s" % len(l))
 	for i in l:
@@ -176,13 +179,13 @@ def about(ctx, args):
         print("verbose: Recieved message preference: \"{0}\", and recieved Whiptail code {1}.".format(PREF, CODE))
     if PREF == "How it Was Made":
         shared.whiptail.textbox("/docker/documents/HOW_IT_WAS_MADE.txt")
-        return 0
+        return about(ctx, args)
     if PREF == "Credits":
         shared.whiptail.textbox("/docker/documents/CREDITS.txt")
-        return 0
+        return about(ctx, args)
     elif PREF == "Legal Disclaimer":
         shared.whiptail.textbox("/docker/documents/ALPHAOS_DISCLAIMER.txt")
-        return 0
+        return about(ctx, args)
     elif PREF == "Exit":
         return 0
     return 1
@@ -225,13 +228,42 @@ def whereis(ctx, args):
         return 1
     o = ""
     if c["type"] == "alias":
+        if system.data.get("main/display-verbose-output"):
+            print("verbose: This is a alias to \'%s\'!" % c["target"])
+            
         o = o + "%s -> " % args[1]
 
     
         c = ctx.KnownCommands[c["target"]]
     
-    o = o + "%s --> %s" % (c["name"], c["command"].__name__)
+    o = o + "%s -> %s" % (c["name"], c["command"].__name__)
 
     print(o)
     return 0
     
+@handler.command("touch" "[file]", "Create a blank file")
+def touch(ctx, args):
+    pass	
+
+@handler.command("python", "[code]", "run python code as alphaos")
+def _handle_python_eval(ctx, args):
+    if len(args) > 1:
+        _ = args[:]
+        del _[0]
+        cmd = " ".join(_)
+
+        exec(cmd)
+
+    
+    cmd = ""
+
+    pr = ""
+    print("Entering Python console.  Enter 'run' to run this code and exit.")
+    while pr.lower().strip() != "run":
+        pr = input("python >>> ")
+        
+        if pr.lower().strip() == "run":
+            break
+
+        cmd = cmd + pr + "\n"
+    return exec(pr)

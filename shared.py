@@ -20,13 +20,19 @@ import json
 import sys
 import log
 from whiptail import Whiptail
-
+#import system
 global logger
+global system
+logger, system = log.CommandLogger(), None
 
 
 SPINNER_FRAMES = ["-", "\\", "|", "/"]
 
-logger = log.logger # im lazy lol
+def setSystem(_system):
+	global logger, system
+	system = _system
+	logger = log.CommandLogger(system)
+
 whiptail = Whiptail(title="DamienOS", backtitle="DamienOS build {}".format(open("/buildct","r").read().replace("\n","")))
 
 def jsonLoad(f, fixData:dict=None, silent=False):

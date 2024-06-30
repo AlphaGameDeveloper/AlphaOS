@@ -18,11 +18,12 @@ import termcolor
 import os
 import json
 import sys
-#import system
+# import system # omitted due to circular import
 
 class CommandLogger:
-	def __init__(self, useconfig=True, broadcastInit=False):
+	def __init__(self, system=None, useconfig=True, broadcastInit=False):
 		self.INFO, self.ERROR, self.WARN, self.FATAL, self.EXEC, self.TIME = [0 for a in range(6)]
+		self.doverbose = False
 		if useconfig == True:
 			try:
 				with open("/data/.config/colorconf.json", "r") as f:
@@ -86,10 +87,15 @@ class CommandLogger:
 		print("[{0}]  Reached subtarget <{1}/{2}>".format(termcolor.colored("STEP", (
 		"cyan" if self.useConfig == False or self.colorconf == None else self.colorconf["logs"]["step"])), self.cstep, self.sstep))
 
+	def verbose(self, text):
+		"""Used in commands"""
+		if self.system.data.get("main/display-verbose-output"):
+			print("verbose: {}".format(text))
+
 # create default (shared) CommandLogger instance.
 # commands may create a new instance by doing
 # type(shared.logger) or type(shared.log.logger)
 # Logger (should) be accessed via shared lib
 # not direct, to prevent ImportError.
-logger = CommandLogger()
-
+# logger = CommandLogger()
+# note: can't do that b/c we need system

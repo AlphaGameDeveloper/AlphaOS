@@ -5,12 +5,15 @@ import json
 class SystemData:
 	def __init__(self):
 		self.config = None
-
+		shared.logger.step("System Registry")
+		shared.logger.substep("Load main.json registry at /main/")
 		self.config = shared.jsonLoad("/data/.config/main.json", silent=False)
+		shared.logger.substep("Load colorconf.json registry at /colorconf/")
 		self.colorconf = shared.jsonLoad("/data/.config/colorconf.json", silent=False)
 		self.build = {
 			"number": open("/buildct").read().replace("\n",""),
 			"time": open("/buildtm").read().replace("\n", "")}
+		shared.logger.substep("All Done")
 
 	def reload(self, quiet=False):
 		self.config = shared.jsonLoad("/data/.config/main.json", silent=quiet)
@@ -45,7 +48,7 @@ class SystemData:
 					return
 				cl = cl[a]
 		except Exception as e:
-			shared.logger.error("Cannot set system key <{0}> due to <{1}>".format(location, e))
+			#shared.logger.error("Cannot set system key <{0}> due to <{1}>".format(location, e))
 			raise e
 		
 	def save(self):
@@ -75,7 +78,7 @@ class SystemData:
 			return cl
 
 		except Exception as e:
-			shared.logger.error("Cannot get system key <{0}> due to <{1}>".format(location, e))
+#			shared.logger.error("Cannot get system key <{0}> due to <{1}>".format(location, e))
 			raise e
 			return
 

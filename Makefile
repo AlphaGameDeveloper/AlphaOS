@@ -1,9 +1,10 @@
 docker:
 #	ct=$(cat build/buildct)
-#	((ct++))
+#	ctx=$((ct + 1))
 #	echo "$ct" > build/buildct
-#	tm=$(date)
-	docker build -t alphagamedev/damienos .
+#	echo $ct $ctx
+	@echo current build $ct, time is $tm
+	docker build -t alphagamedev/damienos --build-arg TIME="$(time)" .
 
 rm:
 	docker container rm damienos -f
@@ -19,4 +20,3 @@ small: rm
 setupWorkspace:
 	mkdir build
 	echo "1" > build/buildct
-	echo "$(date)" > build/buildtm

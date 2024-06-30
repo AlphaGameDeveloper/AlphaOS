@@ -14,18 +14,22 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 print("[INIT]  Loading libraries - Please wait.")
+import shared
+import system
+shared.setSystem(system)
 import termcolor
 import json
 import os
 import sys
 import time
+import readline
 import subprocess
 import command
 import commands.commands
 import commands.basic_utility
 import commands.www
-import shared
-import system
+
+
 #from whiptail import Whiptail
 
 global logger
@@ -40,7 +44,7 @@ def boot():
 	logger.step("Main boot system")
 	shared.chdir("/data")
 	logger.substep("Load JSON files and parse settings")
-	cfg = shared.jsonLoad("/data/system-settings.json", fixData={"fix": True})
+	# cfg = shared.jsonLoad("/data/system-settings.json", fixData={"fix": True})
 	logger.step("Boot")
 	logger.substep("Opening terminal and accept user input")
 	logger.info("+----------------------------------------+")
@@ -101,5 +105,19 @@ def begin():
 		begin()
 
 if __name__ == "__main__":
-	shared.whiptail.textbox("/docker/documents/ALPHAOS_DISCLAIMER.txt")
+	shared.logger.step("Legal Disclaimer")
+	shared.logger.substep("Show AlphaOS Legal Disclaimer")
+	shared.logger.info("Showing AlphaOS Legal Disclaimer.")
+	_ = shared.whiptail.textbox("/docker/documents/ALPHAOS_DISCLAIMER.txt")
+
+	g = shared.whiptail.yesno("Do you accept the terms and conditions?")
+
+	shared.logger.info("Legal Disclaimer shown, got {}.".format(g))
+
+	if not g:
+		shared.whiptail.msgbox("Legal Disclaimer denied.  Exiting.")
+		exit(1)
+
+	shared.logger.substep("All Done")
+	shared.logger.step("Starting begin process")
 	begin()
