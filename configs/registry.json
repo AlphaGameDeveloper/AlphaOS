@@ -1,0 +1,12 @@
+{
+	"mounts": [
+		{
+			"point": "main",
+			"path": "/data/.config/main.json"
+		},
+		{
+			"point": "colorconf",
+			"path": "/data/.config/main.json"
+		}
+	]
+}
