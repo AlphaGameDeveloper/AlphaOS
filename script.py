@@ -17,37 +17,40 @@
 import shared
 import os
 
+
 def holydscript(ctx, args):
-	"""Run Holy-D script
-	@args <script>"""
-	if len(args) == 1:
-		shared.logger.error("No script given!")
-		shared.logger.error("Usage: script <scriptpath>")
-		return 1
-	if os.path.isfile(args[1]) == False:
-		shared.logger.error("Script given does not exist!")
-		shared.logger.error("Usage: script <scriptpath>")
-		return 1
-	sl = [l.replace("\n", "") for l in open(args[1], "r").readlines() if "??" not in l]
+    """Run Holy-D script
+    @args <script>"""
+    if len(args) == 1:
+        shared.logger.error("No script given!")
+        shared.logger.error("Usage: script <scriptpath>")
+        return 1
+    if os.path.isfile(args[1]) == False:
+        shared.logger.error("Script given does not exist!")
+        shared.logger.error("Usage: script <scriptpath>")
+        return 1
+    sl = [l.replace("\n", "")
+          for l in open(args[1], "r").readlines() if "??" not in l]
 
-	if len(sl) < 1:
-		shared.logger.error("Script seems to be empty (Lines < 1)")
-		return
+    if len(sl) < 1:
+        shared.logger.error("Script seems to be empty (Lines < 1)")
+        return
 
-	for l in sl:
-		rs = r.split(" ")
-		if len(rs) > 0:
-			rs[0] = rs[0].lower()
-			if rs[0] == "ret":
-				try:
-					ret = int(rs[1])
-					return ret
-				except ValueError:
-					shared.logger.error("Script must end with a integer")
-					return 1
-		r = ctx.run_command(l, i=True)
-		if r == 1:
-			shared.logger.error("==> There is an error in this script, so it will stop.")
-			return
-		return 0
-	print("==> SCRIPT EXITED")
+    for l in sl:
+        rs = r.split(" ")
+        if len(rs) > 0:
+            rs[0] = rs[0].lower()
+            if rs[0] == "ret":
+                try:
+                    ret = int(rs[1])
+                    return ret
+                except ValueError:
+                    shared.logger.error("Script must end with a integer")
+                    return 1
+        r = ctx.run_command(l, i=True)
+        if r == 1:
+            shared.logger.error(
+                "==> There is an error in this script, so it will stop.")
+            return
+        return 0
+    print("==> SCRIPT EXITED")

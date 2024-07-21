@@ -21,6 +21,7 @@ import shared
 
 # ---
 
+
 class ExtensionManager:
 	def __init__(self):
 		self.modules = []
@@ -42,4 +43,3 @@ manager = ExtensionManager()
 # ------
 
 # EOF
-

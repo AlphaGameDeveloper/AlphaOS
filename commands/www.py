@@ -15,18 +15,20 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from command import handler
-import wget as _wget # to avoid conflict with command with the same name
+import wget as _wget  # to avoid conflict with command with the same name
 import shared
 import os
+
 
 @handler.command("wget", "[url]", "Download file at specified URL", "Scuffed AF")
 def wget(ctx, args):
     if len(args) < 3:
         shared.logger.error("Usage: wget [url] [output]")
         return 1
-    
+
     fn = _wget.download(args[1], out=args[2])
     print(fn)
+
 
 @handler.command("curl", "[url] (curl opts)", "cURL command-line utility")
 def curl(ctx, args):
@@ -34,6 +36,7 @@ def curl(ctx, args):
     del _a[0]
     os.system("curl %s" % " ".join(_a))
     return 0
+
 
 @handler.command("lynx", "[url] (lynx args)", "Lynx in-terminal Web Browser!")
 def lynx(ctx, args):
