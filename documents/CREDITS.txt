@@ -4,7 +4,7 @@ AlphaOS Credits
 Programming / Development: Damien Boisvert (AlphaGameDeveloper)
 
 Linux Base: The Linux Foundation / Linus Torvalds
-	--> Debian; Ian Murdock
+	--> Alpine Linux
 
 This project is open-source, and it's source code can be found at:
 	-> WWW: <https://github.com/AlphaGameDeveloper/AlphaOS>

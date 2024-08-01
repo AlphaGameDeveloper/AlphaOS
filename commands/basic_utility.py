@@ -110,7 +110,7 @@ def edit(ctx, args):
         file = ""
     else:
         file = args[1]
-    subprocess.call("/bin/nano {}".format(file), shell=True)
+    subprocess.call("$(which nano) {}".format(file), shell=True)
     return 0
 
 

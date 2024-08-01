@@ -20,7 +20,7 @@ class SystemData:
     def reload(self, quiet=False, initial=False):
         if initial:
             shared.logger.substep("Read registry mounts configuration")
-        self.mounts = shared.jsonLoad("/data/.config/registry.json", silent=False)["mounts"]
+        self.mounts = shared.jsonLoad("/data/.config/registry.json", silent=quiet)["mounts"]
 
         if initial:
             shared.logger.substep("Mount system registries")
@@ -29,11 +29,8 @@ class SystemData:
             if initial:
                 shared.logger.substep(
                     f"Mount system registry {mount['path']} at /{mount['point']}")
-            self.registries[mount["point"]] = shared.jsonLoad(mount["path"])
+            self.registries[mount["point"]] = shared.jsonLoad(mount["path"], silent=quiet)
 
-        self.config = shared.jsonLoad("/data/.config/main.json", silent=quiet)
-        self.colorconf = shared.jsonLoad(
-            "/data/.config/colorconf.json", silent=quiet)
         self.registries["build"]= {
             "number": open("/buildct").read().replace("\n", ""),
             "time": open("/buildtm").read().replace("\n", "")}
@@ -78,7 +75,7 @@ class SystemData:
 
     def get(self, location):
         try:
-            l = [i.replace("/", "") for i in location.split("/")]
+            l = [i.replace("/", "") for i in location.split("/") if i.strip() != ""]
             cl = ""
             try:
                 cl = self.registries[l[0]]

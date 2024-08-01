@@ -4,7 +4,7 @@ AlphaOS (DamienOS) Legal Disclaimer
 
 Introduction:
 
-This legal disclaimer governs the use of AlphaOS (also referred to as DamienOS), a hobby operating system based on Linux (Debian). By downloading, installing, using, or distributing AlphaOS, you agree to the terms and conditions set forth in this disclaimer. If you do not agree to these terms, do not use AlphaOS.
+This legal disclaimer governs the use of AlphaOS (also referred to as DamienOS), a hobby operating system based on Linux. By downloading, installing, using, or distributing AlphaOS, you agree to the terms and conditions set forth in this disclaimer. If you do not agree to these terms, do not use AlphaOS.
 
 No Warranty:
 
@@ -38,7 +38,7 @@ By using AlphaOS, you acknowledge that you have read, understood, and agree to b
 
 Contact Information:
 
-If you have any questions or concerns regarding this disclaimer or AlphaOS, please contact Damien Boisvert at damien@alphagame.dev.  More information about DamienOS can be found at https://www.alphagame.dev/projects/alphaos/.
+If you have any questions or concerns regarding this disclaimer or AlphaOS, please contact Damien Boisvert at damien@alphagame.dev.  More information about DamienOS can be found at <https://www.alphagame.dev/projects/alphaos/>.
 
 ---
 

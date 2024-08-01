@@ -35,7 +35,7 @@ def setSystem(_system):
     logger = log.CommandLogger(system)
 
 
-whiptail = Whiptail(title="DamienOS", backtitle="DamienOS build {}".format(
+whiptail = Whiptail(title="AlphaOS", backtitle="AlphaOS build {}".format(
     open("/buildct", "r").read().replace("\n", "")))
 
 

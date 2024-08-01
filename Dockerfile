@@ -1,8 +1,10 @@
-FROM python:3.8
+FROM python:3.8-alpine
 
 WORKDIR /docker
 
-RUN apt update && apt install nano wget whiptail lynx -y
+#RUN apt update && apt install nano wget whiptail lynx -y
+
+RUN apk add newt nano bash
 
 COPY requirements.txt /docker
 
