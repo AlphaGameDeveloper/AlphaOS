@@ -43,13 +43,13 @@ def ls(ctx, args):
     if not os.path.isdir(dir):
         shared.logger.error("Directory \"%s\" doesn't exist!" % dir)
         return 1
-    l = os.listdir(dir)
-    print("Total %s" % len(l))
-    for i in l:
-        if os.path.isfile(i):
-            print("[FILE]  {0}".format(i))
+    listing = os.listdir(dir)
+    print("Total %s" % len(listing))
+    for entry in listing:
+        if os.path.isfile(entry):
+            print("[FILE]  {0}".format(entry))
         else:
-            print("[{0}]  {1}".format(termcolor.colored(" DIR", "blue"), i))
+            print("[{0}]  {1}".format(termcolor.colored(" DIR", "blue"), entry))
     return 0
 
 

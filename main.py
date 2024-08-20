@@ -26,6 +26,7 @@ import json
 import termcolor
 import system
 import shared
+import error
 print("[INIT]  Loading libraries - Please wait.")
 shared.setSystem(system)
 
@@ -72,8 +73,13 @@ def cli():
         blank = False
         username = system.data.get("main/username")
         dir = os.getcwd()
-        cmd = input("{0}> [{1}] -->".format(termcolor.colored(username, "red"),
-                    termcolor.colored(("~" if dir == "/data" else dir), "blue")))
+        try:
+            cmd = input("{0}> [{1}] -->".format(termcolor.colored(username, "red"),
+                        termcolor.colored(("~" if dir == "/data" else dir), "blue")))
+        except KeyboardInterrupt:
+            sys.stdout.write("^C\n")
+            raise SystemError("wpm,")
+            continue
         if cmd.strip() == "":
             blank = True
 
@@ -91,25 +97,16 @@ def cli():
                 ("OK" if ok == True else "NOT OK"), round((time.perf_counter() - start_time)*10, 2)))
 
 
-def pinkScreenGUI():
-    shared.whiptail.msgbox("""              _
-             / )
-         _  / /       Well, this is awkward!
-        (_)( (          AlphaOS crashed against a wall and can't get back up :/
-           | |          AlphaOS will now restart, to clean myself up.
-         _ ( (
-        (_) \ \\  Please make a GitHub issue, that would help loads!
-             \_)
-""")
+def pinkScreenGUI(e):
+    error.ErrorHandler(e).callPinkScreen()
 
 
 def begin():
     try:
         boot()
         cli()
-    except KeyboardInterrupt:
-        pinkScreenGUI()
-        begin()
+    except Exception as e:
+        pinkScreenGUI(e)
 
 
 if __name__ == "__main__":

@@ -41,31 +41,31 @@ class SystemData:
 
     def set(self, location, value):
         try:
-            l = [i.replace("/", "") for i in location.split("/")]
-            cl = ""
-            if l[0] == "main":
-                cl = self.config
-            elif l[0] == "color":
-                cl = self.colorconf
+            location_parts = [i.replace("/", "") for i in location.split("/")]
+            current_location = ""
+            if location_parts[0] == "main":
+                current_location = self.config
+            elif location_parts[0] == "color":
+                current_location = self.colorconf
 # elif l[0] == "build":
 # cl = self.build
             else:
-                raise ValueError("No base location {0}".format(l[0]))
-            del l[0]
+                raise ValueError("No base location {0}".format(location_parts[0]))
+            del location_parts[0]
             index = 0
-            for a in l:
+            for a in location_parts:
                 if a == len(l) - 1:
                     # last one (???????????)
                     print("change this")
-                    print(cl[a])
-                    cl[a] = value
+                    print(current_location[a])
+                    current_location[a] = value
                     return
-                cl = cl[a]
+                current_location = current_location[a]
         except ValueError:
-            return ""
+            return None
         except Exception as e:
-            # shared.logger.error("Cannot set system key <{0}> due to <{1}>".format(location, e))
-            raise e
+            shared.logger.error("Cannot set system key <{0}> due to <{1}>".format(location, repr(e)))
+            return None
             
     def save(self):
         with open("/data/.config/main.json", "w") as f:
@@ -75,26 +75,26 @@ class SystemData:
 
     def get(self, location):
         try:
-            l = [i.replace("/", "") for i in location.split("/") if i.strip() != ""]
-            cl = ""
+            location_parts = [i.replace("/", "") for i in location.split("/") if i.strip() != ""]
+            current_location = ""
             try:
-                cl = self.registries[l[0]]
+                current_location = self.registries[location_parts[0]]
             except NameError:
-                raise NameError("No base location {0}".format(l[0]))
-
-            del l[0]
-            for a in l:
+                shared.logger.error("No base location {0}" % location_parts[0])
+                return None
+            
+            del location_parts[0]
+            for location in location_parts:
                 try:
-                    a = int(a)
+                    location = int(location)
                 except ValueError:
                     pass # ok, can't do that!
-                cl = cl[a]
+                current_location = current_location[location]
 
-            return cl
+            return current_location
 
         except Exception as e:
-            # shared.logger.error("Cannot get system key <{0}> due to <{1}>".format(location, e))
-            raise e
+            shared.logger.error("Cannot get system key <{0}>".format(location))
             return
 
 

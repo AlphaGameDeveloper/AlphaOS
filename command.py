@@ -98,6 +98,9 @@ class CommandHandler:
         try:
             # run it
             command_result = s(self, cmd)
+        except KeyboardInterrupt:
+            sys.stdout.write("^C\n")
+            command_result = 255 # keyboard interrupt
         except Exception as e:
             # TODO fix migration to ctx/context systems.
             shared.logger.error(
