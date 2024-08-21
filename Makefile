@@ -1,22 +1,27 @@
 docker:
-#	ct=$(cat build/buildct)
-#	ctx=$((ct + 1))
-#	echo "$ct" > build/buildct
-#	echo $ct $ctx
 	@echo current build $ct, time is $tm
-	docker build -t alphagamedev/damienos --build-arg TIME="$(time)" .
+	docker build -t alphagamedev/damienos --build-arg TIME="$$(date)" --build-arg BUILD="$$(cat build/buildct)" .
 
+incriment_build:
+	@build_number=$$(cat build/buildct); \
+	new_build_number=$$((build_number + 1)); \
+	echo "$$new_build_number" > build/buildct
+	@echo "This is build number $$(cat build/buildct)"
+
+banner: incriment_build
+	@cat tools/aos_ascii_art.txt
+	
 rm:
 	docker container rm damienos -f
 
-run: rm docker container
+run: banner rm docker container
 
 container:
 	docker run --rm -it --name damienos alphagamedev/damienos
 
-small: rm
+small: banner rm
 	docker run --rm -it --name damienos -v .:/docker/ -v ./configs:/data/.config alphagamedev/damienos
 
-setupWorkspace:
+setupWorkspace: banner
 	mkdir build
 	echo "1" > build/buildct

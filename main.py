@@ -106,6 +106,7 @@ def begin():
         boot()
         cli()
     except Exception as e:
+        shared.logger.error("FATAL ERROR: {0}".format(repr(e)))
         pinkScreenGUI(e)
 
 

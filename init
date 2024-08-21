@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Welcome to AlphaOS GNU/Linux"
+/bin/sh

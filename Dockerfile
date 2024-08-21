@@ -18,6 +18,10 @@ RUN echo "$BUILD" > /buildct && echo "$TIME" > /buildtm
 
 COPY . /docker
 
+COPY init /
+
+RUN chmod +x /init
+
 RUN mkdir /data && mv /docker/configs /data/.config
 
 WORKDIR /data

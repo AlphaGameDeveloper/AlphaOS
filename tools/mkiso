@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -e
+
+# Variables
+DOCKER_IMAGE="alphagamedev/alphaos:latest"
+INITRAMFS_DIR="initramfs"
+ISO_DIR="iso"
+ISO_IMAGE="alphaos.iso"
+KERNEL_IMAGE="bzImage"
+INITRAMFS_OUTPUT="initramfs.cpio.gz"
+GRUB_CFG="grub.cfg"
+
+# Ensure required tools are available
+command -v docker > /dev/null 2>&1 || { echo >&2 "Docker is required but not installed. Aborting."; exit 1; }
+command -v mkisofs > /dev/null 2>&1 || { echo >&2 "mkisofs is required but not installed. Aborting."; exit 1; }
+command -v grub-mkrescue > /dev/null 2>&1 || { echo >&2 "grub-mkrescue is required but not installed. Aborting."; exit 1; }
+command -v cpio > /dev/null 2>&1 || { echo >&2 "cpio is required but not installed. Aborting."; exit 1; }
+command -v gzip > /dev/null 2>&1 || { echo >&2 "gzip is required but not installed. Aborting."; exit 1; }
+
+# Step 1: Create initramfs from Docker container filesystem
+echo "Creating initramfs from Docker container filesystem..."
+mkdir -p "$INITRAMFS_DIR"
+
+# Use Docker to create the initramfs archive and save it to the host system
+docker run --rm -v "$PWD/$INITRAMFS_DIR:/initramfs" "$DOCKER_IMAGE" /bin/sh -c "find / -print0 | cpio --null -ov --format=newc | gzip -9 > /initramfs/$INITRAMFS_OUTPUT"
+
+# Ensure the initramfs creation was successful
+if [ ! -f "$INITRAMFS_DIR/$INITRAMFS_OUTPUT" ]; then
+    echo "Initramfs creation failed."
+    exit 1
+fi
+
+# Step 2: Prepare ISO Directory Structure for GRUB
+echo "Setting up ISO directory structure for GRUB..."
+mkdir -p "$ISO_DIR/boot/grub"
+cp "$KERNEL_IMAGE" "$ISO_DIR/boot/"
+cp "$INITRAMFS_DIR/$INITRAMFS_OUTPUT" "$ISO_DIR/boot/"
+
+# Create GRUB configuration
+cat <<EOF > "$ISO_DIR/boot/grub/grub.cfg"
+set timeout=5
+set default=0
+
+menuentry "AlphaOS" {
+    linux /boot/bzImage root=/dev/ram0 ro
+    set root='(cd0)'
+    initrd /boot/initramfs.cpio.gz
+}
+EOF
+
+# Step 3: Create Bootable ISO with GRUB
+echo "Creating bootable ISO image with GRUB..."
+grub-mkrescue -o "$ISO_IMAGE" "$ISO_DIR"
+
+echo "Bootable ISO image created successfully: $ISO_IMAGE"
+
+# Clean up
+rm -rf "$INITRAMFS_DIR" "$ISO_DIR"
+
+echo "Clean up complete."
