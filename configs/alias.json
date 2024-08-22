@@ -1,0 +1,8 @@
+{
+    "aliases": {
+        "micro": {
+            "command": "nano",
+            "append-arguments": true
+        }
+    }
+}

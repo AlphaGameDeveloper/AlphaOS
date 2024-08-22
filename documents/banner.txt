@@ -19,6 +19,6 @@
 
 
     AlphaOS  Copyright (C) 2024  Damien Boisvert (AlphaGameDeveloper)
-    This program comes with ABSOLUTELY NO WARRANTY; for details type `about'.
+    This program comes with ABSOLUTELY NO WARRANTY; for details type `about w'.
     This is free software, and you are welcome to redistribute it
-    under certain conditions; type `about' for details.
+    under certain conditions; type `about l' for details.

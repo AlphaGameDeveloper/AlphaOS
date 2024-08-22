@@ -7,6 +7,10 @@
 		{
 			"point": "colorconf",
 			"path": "/data/.config/main.json"
+		},
+		{
+			"point": "alias",
+			"path": "/data/.config/alias.json"
 		}
 	]
 }

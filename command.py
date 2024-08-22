@@ -22,7 +22,7 @@ import script
 import os
 import system
 import please
-
+import termcolor
 
 class CommandHandler:
     def __init__(self):
@@ -54,7 +54,7 @@ class CommandHandler:
             return function
         return decorator
 
-    def run_command(self, command, i=False, please=False):
+    def run_command(self, command, inScript=False, please=False):
         """Run a command!"""
         self.please = please
         cmd = command.split(" ")
@@ -83,7 +83,7 @@ class CommandHandler:
             return 0
 # print(nocmd)
         try:
-            if (cmd[0] == "script") and (i == True):
+            if (cmd[0] == "script") and (inScript == True):
                 shared.logger.error("You cannot run a script from a script!")
                 return 1
             target = self.KnownCommands[cmd[0]]
@@ -91,9 +91,20 @@ class CommandHandler:
                 target = self.KnownCommands[target["target"]]
             s = target["command"]
         except KeyError:
-            shared.logger.error(
-                "?SYNTAX error?  The command \"{0}\" is not a command, operable program, or Holy-D script.".format(cmd[0]))
-            return 1
+            aliases = system.data.get("alias/aliases")
+            if cmd[0] in aliases.keys():
+                cmd_ = cmd[0]
+                cmd_args = cmd[1:]
+                sh_command = "%s%s" % (aliases[cmd_]["command"], 
+                                (" " + " ".join(cmd_args) if system.data.get(f"alias/aliases/{cmd_}/append-arguments") else ""))
+                print("'%s'" % sh_command)
+                s = lambda ctx, args: os.system(sh_command)
+            else:
+                shared.logger.error(
+                    "?SYNTAX error?  The command {0} is not a command, operable program, or Holy-D script.".format(
+                        termcolor.colored("\"%s\"" % cmd[0], "blue", attrs=["bold"])))
+                    
+                return 1
 
         try:
             # run it

@@ -77,8 +77,7 @@ def cli():
             cmd = input("{0}> [{1}] -->".format(termcolor.colored(username, "red"),
                         termcolor.colored(("~" if dir == "/data" else dir), "blue")))
         except KeyboardInterrupt:
-            sys.stdout.write("^C\n")
-            raise SystemError("wpm,")
+            sys.stdout.write("\n")
             continue
         if cmd.strip() == "":
             blank = True
