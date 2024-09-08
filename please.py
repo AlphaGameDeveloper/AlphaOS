@@ -3,10 +3,12 @@ import time
 import whiptail
 import system
 
+#This is not fully implemented yet!
+
 
 class PleaseManager:
     def __init__(self):
-        self.w = whiptail.Whiptail(title="Please authenticate", backtitle="DamienOS build {0}".format(
+        self.w = whiptail.Whiptail(title="Please authenticate", backtitle="AlphaOS build {0}".format(
             open("/buildct").read().replace("\n", "")))
         self.hasher = hashlib.sha256()
         # self.hasher.update(bytes(time.ctime(), "utf-8"))

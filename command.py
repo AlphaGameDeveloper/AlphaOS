@@ -1,4 +1,4 @@
-#    DamienOS -- Shitty operating system (File:commands.py)
+#    AlphaOS -- Shitty operating system (File:commands.py)
 #    Copyright (C) 2023  Damien Boisvert (AlphaGameDeveloper)
 
 #    This program is free software: you can redistribute it and/or modify
@@ -117,7 +117,7 @@ class CommandHandler:
             shared.logger.error(
                 "?FUNCTION error? The command \"{0}\" has encountered an error, so it cannot continue.".format(cmd[0]))
             shared.logger.error(
-                "==> This is NOT a problem with DamienOS, rather, it is an error in the command.  Error details are below.")
+                "==> This is NOT a problem with AlphaOS, rather, it is an error in the command.  Error details are below.")
             errortype, msg, traceback = sys.exc_info()
             fname = os.path.split(traceback.tb_frame.f_code.co_filename)[1]
             # line = sys.exc_info[2].tb_lineno

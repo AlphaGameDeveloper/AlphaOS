@@ -1,4 +1,4 @@
-#    DamienOS -- Shitty operating system (File:commands.py)
+#    AlphaOS -- Shitty operating system (File:commands.py)
 #    Copyright (C) 2023  Damien Boisvert (AlphaGameDeveloper)
 
 #    This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ def shell(ctx, args=None):
     @args none"""
     print("==> Opening bash shell; Type 'exit' to exit the shell.")
     subprocess.call("/bin/bash", shell=True)
-    print("==> Returning to DamienOS")
+    print("==> Returning to AlphaOS")
     return 0
 
 

@@ -1,4 +1,4 @@
-#    DamienOS -- Shitty operating system
+#    AlphaOS -- Shitty operating system
 #    Copyright (C) 2023  Damien Boisvert (AlphaGameDeveloper)
 
 #    This program is free software: you can redistribute it and/or modify
@@ -49,20 +49,20 @@ def boot():
     # cfg = shared.jsonLoad("/data/system-settings.json", fixData={"fix": True})
     logger.step("Boot")
     logger.substep("Opening terminal and accept user input")
-    logger.info("+----------------------------------------+")
-    logger.info("|             DamienOS build             |")
-    logger.info("+----------------------------------------+")
+    logger.info("+---------------------------------------+")
+    logger.info("|             AlphaOS build             |")
+    logger.info("+---------------------------------------+")
     logger.info("| 01 BUILD     : {0}".format(system.data.get("build/number")))
     logger.info("| 02 BUILDTIME : {0}".format(system.data.get("build/time")))
     logger.info("| 03 LICENSE   : GPL-3-OR-LATER")
-    logger.info("+----------------------------------------+")
+    logger.info("+---------------------------------------+")
     logger.step("Start")
-    logger.substep("Start DamienOS main interactive mode")
+    logger.substep("Start AlphaOS main interactive mode")
 
 
 def cli():
     print(open("/docker/banner.txt", "r").read())
-    # username = "damienos" if not os.getenv("USERNAME") else os.getenv("USERNAME")
+    # username = "AlphaOS" if not os.getenv("USERNAME") else os.getenv("USERNAME")
     if system.data.get("main/password-sha256") == "6b3a55e0261b0304143f805a24924d0c1c44524821305f31d9277843b8a10f4e":
         # password = 'password'
         shared.logger.warn(

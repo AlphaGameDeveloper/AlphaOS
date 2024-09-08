@@ -1,4 +1,4 @@
-#    DamienOS -- Shitty operating system (file:error.py)
+#    AlphaOS -- Shitty operating system (file:error.py)
 #    Copyright (C) 2023  Damien Boisvert (AlphaGameDeveloper)
 
 #    This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class ErrorHandler:
         self.ERROR = error
 
     def callPinkScreen(self):
-        option = shared.whiptail.menu("DamienOS has encountered a severe error and cannot contiue.", items=("Exit", "See Error Information"))[0]
+        option = shared.whiptail.menu("AlphaOS has encountered a severe error and cannot contiue.", items=("Exit", "See Error Information"))[0]
 
         shared.logger.info("PinkScreen shown, got %s" % str(option))   
 
