@@ -1,4 +1,4 @@
-#    DamienOS -- Shitty operating system (File:shared.py)
+#    AlphaOS -- Shitty operating system (File:shared.py)
 #    Copyright (C) 2023  Damien Boisvert (AlphaGameDeveloper)
 
 #    This program is free software: you can redistribute it and/or modify

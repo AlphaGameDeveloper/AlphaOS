@@ -1,4 +1,4 @@
-#    DamienOS -- Shitty operating system (File:commands.py)
+#    AlphaOS -- Shitty operating system (File:commands.py)
 #    Copyright (C) 2023  Damien Boisvert (AlphaGameDeveloper)
 
 #    This program is free software: you can redistribute it and/or modify
