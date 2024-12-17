@@ -61,7 +61,14 @@ def boot():
 
 
 def cli():
-    print(open("/docker/banner.txt", "r").read())
+    if system.data.get("main/banner/enabled"):
+        banner_location = system.data.get("main/banner/location")
+        if os.path.isfile(banner_location):
+            with open(banner_location, "r") as f:
+                print(f.read())
+        else:
+            shared.logger.error("Cannot find the banner file!  Modify the location by changing the")
+            shared.logger.error("main/banner/location registry key, or disable it by turning off main/banner/enabled!")
     # username = "AlphaOS" if not os.getenv("USERNAME") else os.getenv("USERNAME")
     if system.data.get("main/password-sha256") == "6b3a55e0261b0304143f805a24924d0c1c44524821305f31d9277843b8a10f4e":
         # password = 'password'
