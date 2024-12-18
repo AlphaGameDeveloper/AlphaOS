@@ -6,7 +6,7 @@
 		},
 		{
 			"point": "colorconf",
-			"path": "/data/.config/main.json"
+			"path": "/data/.config/colorconf.json"
 		},
 		{
 			"point": "alias",

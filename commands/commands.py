@@ -101,7 +101,20 @@ def registry(ctx, args) -> int:
             shared.logger.error("You need to give a registry path and value!")
             shared.logger.error("Usage: registry set (path) (value)")
             return 0
-        system.data.set(args[2], args[3])
+        value = args[3]
+        if value.lower() == "true" or value.lower() == "True":
+            value = True
+        elif value.lower() == "false" or value.lower() == "False":
+            value = False
+        else:
+            try:
+                value = int(value)
+            except ValueError:
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass
+        system.data.set(args[2], value)
 
         shared.logger.info("Registry value set!")
         return 0

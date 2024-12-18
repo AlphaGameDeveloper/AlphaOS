@@ -75,6 +75,19 @@ def jsonLoad(f, fixData: dict = None, silent=False):
     logger.info("....Load OK, no errors found.", silent=silent)
     return j
 
+def jsonSave(f, data, silent=False):
+    logger.info("Beginning save of JSON file <{0}>".format(f), silent=silent)
+    logger.info("....Beginning pre-save of file", silent=silent)
+    logger.info("........Checking if file exists", silent=silent)
+    if os.path.isfile(f) == False:
+        logger.warn("............File does not exist", silent=silent)
+        logger.warn("............Creating file", silent=silent)
+        with open(f, "w") as _f:
+            json.dump(data, _f)
+        logger.warn("............File created", silent=silent)
+        logger.warn("............All done", silent=silent)
+        logger.warn("............Returning to normal execution", silent=silent)
+    return
 
 def chdir(dir):
     os.chdir(dir)

@@ -39,39 +39,36 @@ class SystemData:
         shared.logger.warn(
             "SystemData.init is depricated!  Please use SystemData.reload instead!")
 
-    def set(self, location, value):
+    def set(self, location, value, save=True):
         try:
-            location_parts = [i.replace("/", "") for i in location.split("/")]
-            current_location = ""
-            if location_parts[0] == "main":
-                current_location = self.config
-            elif location_parts[0] == "color":
-                current_location = self.colorconf
-# elif l[0] == "build":
-# cl = self.build
-            else:
-                raise ValueError("No base location {0}".format(location_parts[0]))
-            del location_parts[0]
-            index = 0
-            for a in location_parts:
-                if a == len(l) - 1:
-                    # last one (???????????)
-                    print("change this")
-                    print(current_location[a])
-                    current_location[a] = value
-                    return
-                current_location = current_location[a]
-        except ValueError:
-            return None
+            location_parts = [i.replace("/", "") for i in location.split("/") if i.strip() != ""]
+            current_location = self.registries
+
+            for part in location_parts[:-1]:
+                try:
+                    part = int(part)
+                except ValueError:
+                    pass
+            if part not in current_location:
+                current_location[part] = {}
+            current_location = current_location[part]
+
+            final_part = location_parts[-1]
+            try:
+                final_part = int(final_part)
+            except ValueError:
+                pass
+            current_location[final_part] = value
+
         except Exception as e:
-            shared.logger.error("Cannot set system key <{0}> due to <{1}>".format(location, repr(e)))
-            return None
+            shared.logger.error("Cannot set system key <{0}>".format(location))
+        
+        if save:
+            self.save()
             
     def save(self):
-        with open("/data/.config/main.json", "w") as f:
-            json.dump(self.config["main"], f)
-        with open("/data/.config/colorconf.json", "w") as f:
-            json.dump(self.colorconf, f)
+        for mount in self.mounts:
+            shared.jsonSave(mount["path"], self.registries[mount["point"]])
 
     def get(self, location):
         try:
