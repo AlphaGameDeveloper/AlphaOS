@@ -1,0 +1,140 @@
+# AlphaOS Makefile — cross-platform ISO builder
+PROJECT=AlphaOS
+ALPINE_VER=3.18.4
+PYTHON_VER=3.8.18-r0
+ARCH=x86_64
+ROOTFS_DIR=build/rootfs
+ISO_DIR=build/iso
+DOWNLOADS=build/downloads
+OUT_ISO=build/$(PROJECT).iso
+ALPINE_TARBALL=$(DOWNLOADS)/alpine-minirootfs-$(ALPINE_VER)-$(ARCH).tar.gz
+
+# Detect OS (Mac or Linux)
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	SUDO := 
+	MOUNT_CMD := gsudo mount # macOS placeholder, no bind mount support
+	GRUB_RESCUE := grub-mkrescue
+	QEMU_CMD := qemu-system-x86_64
+else
+	SUDO := sudo
+	MOUNT_CMD := sudo mount --bind
+	GRUB_RESCUE := grub-mkrescue
+	QEMU_CMD := qemu-system-x86_64
+endif
+
+.PHONY: all download extract chroot setup-kernel setup-initramfs copy-assets setup-iso build-iso test clean
+
+all: $(OUT_ISO)
+
+$(ALPINE_TARBALL):
+	mkdir -p $(DOWNLOADS)
+	wget -O $@ https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/$(ARCH)/alpine-minirootfs-$(ALPINE_VER)-$(ARCH).tar.gz
+
+download: $(ALPINE_TARBALL)
+
+extract:
+	rm -rf $(ROOTFS_DIR)
+	mkdir -p $(ROOTFS_DIR)
+	@echo "Extracting Alpine rootfs inside container tmpfs, then copying to $(ROOTFS_DIR) without permissions/ownership..."
+	docker run --rm -it \
+		-v "$(PWD)":/alphaos -w /alphaos ubuntu:22.04 bash -c "\
+			apt update >/dev/null && apt install -y tar rsync >/dev/null && \
+			mkdir -p /tmp/rootfs && \
+			tar --no-same-owner --no-same-permissions -xzf $(ALPINE_TARBALL) -C /tmp/rootfs && \
+			rm -rf $(ROOTFS_DIR) && \
+			mkdir -p $(ROOTFS_DIR) && \
+			rsync -a --no-perms --no-owner --no-group /tmp/rootfs/ $(ROOTFS_DIR)/"
+
+chroot:
+	@echo "Preparing chroot environment inside Docker container..."
+	docker run --rm -it \
+		-v "$(PWD)":/alphaos -w /alphaos --privileged ubuntu:22.04 bash -c "\
+			apt update >/dev/null && apt install -y mount && \
+			cp /etc/resolv.conf $(ROOTFS_DIR)/etc/ && \
+			mount --bind /dev $(ROOTFS_DIR)/dev && \
+			umount $(ROOTFS_DIR)/dev"
+
+setup-kernel:
+	@if [ ! -f $(ROOTFS_DIR)/boot/vmlinuz-lts ]; then \
+		echo "Kernel not found. Installing linux-lts kernel inside rootfs via Alpine Docker..."; \
+		if [ ! -f $(ROOTFS_DIR)/etc/apk/repositories ]; then \
+			mkdir -p $(ROOTFS_DIR)/etc/apk && \
+			echo "http://dl-cdn.alpinelinux.org/alpine/v3.18/main" > $(ROOTFS_DIR)/etc/apk/repositories; \
+		fi; \
+		docker run --rm -it \
+			-v "$(PWD)/$(ROOTFS_DIR)":/rootfs \
+			-w /rootfs \
+			alpine:3.18 \
+			sh -c "apk update && apk add linux-lts"; \
+	else \
+		echo "Kernel already installed: $(ROOTFS_DIR)/boot/vmlinuz-lts"; \
+	fi
+
+setup-initramfs: setup-kernel
+	@KVER=$$(ls $(ROOTFS_DIR)/lib/modules | head -n 1); \
+	if [ -z "$$KVER" ]; then \
+		echo "No kernel modules directory found! Cannot create initramfs."; exit 1; \
+	fi; \
+	echo "Generating initramfs for kernel version $$KVER..."; \
+	docker run --rm -it --privileged \
+		-v "$(PWD)/$(ROOTFS_DIR)":/rootfs \
+		-w /rootfs \
+		alpine:3.18 sh -c "\
+			echo 'http://dl-cdn.alpinelinux.org/alpine/v3.18/main' > /etc/apk/repositories && \
+			echo 'http://dl-cdn.alpinelinux.org/alpine/v3.18/community' >> /etc/apk/repositories && \
+			apk update && apk add mkinitfs && \
+			mkinitfs -c /etc/mkinitfs/mkinitfs.conf -k $$KVER -f"
+
+copy-assets: setup-initramfs
+	docker run --rm -it \
+		-v "$(PWD)":/alphaos -w /alphaos ubuntu:22.04 bash -c "\
+			rm -f $(ROOTFS_DIR)/sbin/init && \
+			cp init $(ROOTFS_DIR)/sbin/init"
+
+	mkdir -p $(ROOTFS_DIR)/opt/alphaos/
+	cp *.py $(ROOTFS_DIR)/opt/alphaos/
+	cp -r commands $(ROOTFS_DIR)/opt/alphaos/
+
+	mkdir -p $(ROOTFS_DIR)/etc/alphaos/
+	cp -r configs/* $(ROOTFS_DIR)/etc/alphaos/
+
+	mkdir -p $(ROOTFS_DIR)/usr/share/doc/alphaos/
+	cp -r documents/* $(ROOTFS_DIR)/usr/share/doc/alphaos/
+
+	mkdir -p $(ROOTFS_DIR)/opt/alphaos/tools/
+	cp -r tools/* $(ROOTFS_DIR)/opt/alphaos/tools/
+
+	cp requirements.txt $(ROOTFS_DIR)/opt/alphaos/
+	
+	docker run --rm -it --privileged \
+		-v "$(PWD)":/alphaos -w /alphaos ubuntu:22.04 bash -c "\
+			mount -t proc proc $(ROOTFS_DIR)/proc && \
+			mount --rbind /sys $(ROOTFS_DIR)/sys && \
+			mount --rbind /dev $(ROOTFS_DIR)/dev && \
+			echo 'http://dl-cdn.alpinelinux.org/alpine/v3.18/main' > $(ROOTFS_DIR)/etc/apk/repositories && \
+			echo 'http://dl-cdn.alpinelinux.org/alpine/v3.18/community' >> $(ROOTFS_DIR)/etc/apk/repositories && \
+			chroot $(ROOTFS_DIR) /bin/sh -c 'apk update && apk add python3 py3-pip' && \
+			chroot $(ROOTFS_DIR) /bin/sh -c 'pip3 install -r /opt/alphaos/requirements.txt' && \
+			umount -l $(ROOTFS_DIR)/proc $(ROOTFS_DIR)/sys $(ROOTFS_DIR)/dev"
+
+setup-iso: copy-assets
+	rm -rf $(ISO_DIR)
+	mkdir -p $(ISO_DIR)/boot/grub
+	cp -a $(ROOTFS_DIR)/* $(ISO_DIR)/
+	cp $(ROOTFS_DIR)/boot/vmlinuz-lts $(ISO_DIR)/boot/vmlinuz
+	cp $(ROOTFS_DIR)/boot/initramfs-*.img $(ISO_DIR)/boot/initramfs-lts
+
+	# GRUB config
+	@echo "set default=0\nset timeout=5\nmenuentry \"AlphaOS\" {\n linux /boot/vmlinuz root=/dev/sr0 quiet\n initrd /boot/initramfs-lts\n}" > $(ISO_DIR)/boot/grub/grub.cfg
+
+build-iso:
+	$(GRUB_RESCUE) -o $(OUT_ISO) $(ISO_DIR)
+
+test:
+	$(QEMU_CMD) -cdrom $(OUT_ISO) -m 512M -nographic
+
+clean:
+	rm -rf build
+
+$(OUT_ISO): download extract chroot setup-kernel setup-initramfs copy-assets setup-iso build-iso
